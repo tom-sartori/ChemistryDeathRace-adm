@@ -1,0 +1,20 @@
+<mat-toolbar color="primary">
+  <a routerLink="/questions" class="home-link"><img class="logo" src="assets/images/logo.png" alt="logo"></a>
+  <span class="spacer"></span>
+  <ul *ngIf="isUserLoggedIn" class="menu-horizontal">
+    <li><a (click)="logout()" matTooltip="Déconnexion"><mat-icon class="icon-logout">logout</mat-icon></a></li>
+  </ul>
+
+
+  <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menu"  class="menu-button">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu" class="menu-button">
+    <a (click)="logout()" *ngIf="isUserLoggedIn" >
+      <button mat-menu-item>
+        <mat-icon>logout</mat-icon>
+        <span>Déconnexion</span>
+      </button>
+    </a>
+  </mat-menu>
+</mat-toolbar>

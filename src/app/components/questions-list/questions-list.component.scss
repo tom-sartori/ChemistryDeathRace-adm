@@ -1,0 +1,62 @@
+@import "../../../assets/styles/colors";
+
+.question {
+  color: $color-accent;
+}
+
+div {
+  border-bottom: $color-accent thin solid;
+}
+
+.spinner {
+  border-bottom: none;
+}
+
+.question {
+  color: $color-accent;
+  font-size: large;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.infos {
+  border-bottom: none;
+}
+
+a {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+}
+
+.form {
+  width: 100%;
+}
+
+.search-bar {
+  width: 70%;
+}
+
+.search-type {
+  width: 30%;
+}
+
+.newButton {
+  margin-bottom: 20px;
+}
+
+.btn_icon {
+  margin: auto 10px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  border-bottom: none;
+}

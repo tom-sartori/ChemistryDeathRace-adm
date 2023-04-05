@@ -1,0 +1,53 @@
+@import '../../../assets/styles/colors';
+
+ul {
+  list-style: none;
+}
+
+li {
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.active {
+  color: $color-accent;
+  border-bottom: $color-accent thin solid;
+}
+
+.home-link {
+  height: 100%;
+  display: flex;
+}
+
+.home-link:hover {
+  border-bottom: none;
+}
+
+.logo {
+  margin: auto;
+  height: 80%;
+}
+
+.icon-logout {
+  cursor: pointer;
+  font-size: 19px;
+  text-align: center;
+}
+
+/* --------------------- Media Queries --------------------- */
+
+@media (max-width: 800px) {
+  .menu-horizontal {
+    display: none;
+  }
+}
+
+@media (min-width: 800px) {
+  .menu-button {
+    display: none;
+  }
+}

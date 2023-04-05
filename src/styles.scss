@@ -1,4 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
+@import "src/assets/styles/colors.scss";
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: $color-accent;}
+
+a {
+  color: white;
+  text-decoration: none;
+  font-weight: normal;
+  &:hover {
+    border-bottom: white thin solid;
+  }
+}
+
+h1 {
+  color: white;
+}
+
+.spinner {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  width: 150px;
+  height: 150px;
+  animation: spinner 1s infinite;
+}
+
+.spinner-image {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

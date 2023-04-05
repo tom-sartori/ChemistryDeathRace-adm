@@ -1,0 +1,9 @@
+@import "src/assets/styles/colors.scss";
+
+.main-content {
+  box-sizing: border-box;
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+  background-color: $color-accent;
+}

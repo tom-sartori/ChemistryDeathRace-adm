@@ -1,0 +1,43 @@
+.inputs {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputs > mat-form-field {
+  margin-bottom: 20px;
+}
+
+.google-logo {
+  height: 25px;
+  margin-right: 10px;
+}
+
+.connection-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.connection-buttons > button {
+  width: 100%;
+}
+
+.connection-buttons > p {
+  margin-top: 10px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 800px) {
+  .action-buttons {
+    flex-direction: column;
+  }
+}
+
+.action-buttons > button {
+  margin-top: 20px;
+  min-width: 30%;
+}
