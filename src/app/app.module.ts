@@ -7,7 +7,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {SharedModule} from "./shared/shared.module";
 import {QuestionsListComponent} from "./components/questions-list/questions-list.component";
 import {QuestionsService} from "./services/questions.service";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {ErrorComponent} from "./components/error/error.component";
 import {HeaderComponent} from "./components/header/header.component";
 import {AuthService} from "./services/auth.service";
@@ -17,6 +17,7 @@ import {AngularFireModule} from "@angular/fire/compat";
 import {QuestionFormComponent} from "./components/question-form/question-form.component";
 import {SigninComponent} from "./components/signin/signin.component";
 import {RouterModule} from "@angular/router";
+import {AuthInterceptor} from "./interceptors/auth.interceptor";
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import {RouterModule} from "@angular/router";
   ],
   providers: [
     QuestionsService,
-    AuthService
+    AuthService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
