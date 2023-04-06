@@ -34,13 +34,9 @@ export class AuthService {
 
   signIn(email: string, password: string) {
     return this.afAuth.signInWithEmailAndPassword(email, password).then((result) => {
-      console.log(result);
       this.setIsUserLoggedIn$(true);
-      this.router.navigate(["/questions"]).then((r) => {
-        console.log(r);
-      })
-      console.log("navigateByUrl");
-
+      this.router.navigate(["/questions"])
+      localStorage.setItem('user', JSON.stringify(result.user));
     }).catch((error) => {
       if (error.message === "Firebase: The email address is badly formatted. (auth/invalid-email)."){
         Notify.failure("L'adresse email n'est pas au bon format");
