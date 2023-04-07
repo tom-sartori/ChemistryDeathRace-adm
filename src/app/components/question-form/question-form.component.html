@@ -12,20 +12,35 @@
         <mat-error>Ce champ est requis</mat-error>
       </mat-form-field>
     </div>
-    <p>Choisir une catégorie : </p>
+    <p>Choisir une difficulté : </p>
     <div class="form-row">
-      <mat-radio-group formControlName="category" class="radio-group" *ngIf="categories$ | async as categories">
-        <mat-radio-button *ngFor="let category of categories" [value]="category">{{ category }}</mat-radio-button>
+      <mat-radio-group formControlName="difficulty" class="radio-group" *ngIf="difficulties$ | async as difficulties">
+        <mat-radio-button *ngFor="let difficulty of difficulties" [value]="difficulty" (click)="updateDifficulty(difficulty.toString())">{{ difficulty }}</mat-radio-button>
       </mat-radio-group>
     </div>
-    <ng-container *ngIf="categories$ | async as categories">
-      <div class="form-row" *ngIf="categories.length < 6">
-        <mat-form-field appearance="fill">
-          <mat-label>Ajouter une catégorie</mat-label>
-          <input type="text" matInput [formControl]="categoryCtrl">
-          <button mat-flat-button matSuffix mat-icon-button aria-label="Clear" (click)="addCategoryLocaly()">Ajouter</button>
-        </mat-form-field>
+    <div class="form-row" *ngIf="difficulties$ | async as difficulties">
+      <mat-form-field appearance="fill">
+        <mat-label>Ajouter une difficulté</mat-label>
+        <input type="text" matInput [formControl]="difficultyCtrl">
+        <button mat-flat-button matSuffix style="background-color: transparent" aria-label="Clear" (click)="addDifficultyLocally()">Ajouter</button>
+      </mat-form-field>
+    </div>
+    <ng-container *ngIf="currentDifficulty != ''">
+      <p>Choisir une catégorie : </p>
+      <div class="form-row">
+        <mat-radio-group formControlName="category" class="radio-group" *ngIf="categories$ | async as categories">
+          <mat-radio-button *ngFor="let category of categories" [value]="category">{{ category }}</mat-radio-button>
+        </mat-radio-group>
       </div>
+      <ng-container *ngIf="categories$ | async as categories">
+        <div class="form-row" *ngIf="categories.length < 6">
+          <mat-form-field appearance="fill">
+            <mat-label>Ajouter une catégorie</mat-label>
+            <input type="text" matInput [formControl]="categoryCtrl">
+            <button mat-flat-button matSuffix style="background-color: transparent" aria-label="Clear" (click)="addCategoryLocally()">Ajouter</button>
+          </mat-form-field>
+        </div>
+      </ng-container>
     </ng-container>
   </mat-card>
 
@@ -39,7 +54,7 @@
           <mat-error>Ce champ est requis</mat-error>
         </mat-form-field>
         <mat-radio-group (change)="updateCorrectAnswer(i)" formControlName="answer">
-          <mat-radio-button [value]="true" [checked]="answer.get('answer')?.value">Bonne réponse</mat-radio-button>
+          <mat-radio-button style="margin-left: 10px; margin-bottom: 15px" [value]="true" [checked]="answer.get('answer')?.value">Bonne réponse</mat-radio-button>
         </mat-radio-group>
       </div>
       <div>

@@ -35,7 +35,8 @@ export class QuestionsListComponent implements OnInit {
     this.questionsService.questions$.subscribe();
     this.searchTypeOptions = [
       { value: QuestionSearchType.QUESTION, label: 'Question' },
-      { value: QuestionSearchType.CATEGORY, label: 'Catégorie' }
+      { value: QuestionSearchType.CATEGORY, label: 'Catégorie' },
+      { value: QuestionSearchType.DIFFICULTY, label: 'Difficulté' }
     ]
   }
 

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Observable, switchMap, tap} from "rxjs";
+import {Observable, startWith, switchMap, tap} from "rxjs";
 import {Question} from "../../models/question.model";
 import {QuestionsService} from "../../services/questions.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -19,10 +19,13 @@ export class QuestionFormComponent implements OnInit {
   propositions!: FormArray;
 
   categoryCtrl!: FormControl;
+  difficultyCtrl!: FormControl;
 
   question$!: Observable<Question>;
   categories$!: Observable<String[]>;
+  difficulties$!: Observable<String[]>;
   currentQuestionId!: string;
+  currentDifficulty: string = '';
 
   constructor(private formBuilder: FormBuilder,
               private questionsService: QuestionsService,
@@ -33,11 +36,13 @@ export class QuestionFormComponent implements OnInit {
     this.initMainForm();
     this.initOptions();
     this.categories$ = this.questionsService.categories$;
+    this.difficulties$ = this.questionsService.difficulties$;
     this.loading$ = this.questionsService.loading$;
   }
 
   private initMainForm(): void {
     this.categoryCtrl = this.formBuilder.control('');
+    this.difficultyCtrl = this.formBuilder.control('');
     if (this.router.url === "/questions/add") {
       this.initAddForm();
     } else {
@@ -59,7 +64,7 @@ export class QuestionFormComponent implements OnInit {
   }
 
   private initOptions() {
-    this.questionsService.getCategoriesFromServer();
+    this.questionsService.getDifficultiesFromServer();
   }
 
   private initAddForm() {
@@ -72,6 +77,7 @@ export class QuestionFormComponent implements OnInit {
     this.mainForm = this.formBuilder.group({
       name: ['', Validators.required],
       category: ['', Validators.required],
+      difficulty: ['', Validators.required],
       propositions: this.propositions
     });
   }
@@ -95,8 +101,10 @@ export class QuestionFormComponent implements OnInit {
         this.mainForm = this.formBuilder.group({
           name: [question.name, Validators.required],
           category: [question.category, Validators.required],
+          difficulty: [question.difficulty, Validators.required],
           propositions: this.propositions
         });
+        this.updateDifficulty(question.difficulty);
       })
     ).subscribe();
   }
@@ -160,13 +168,27 @@ export class QuestionFormComponent implements OnInit {
     this.propositions.controls[index].patchValue({ answer: true });
   }
 
-  addCategoryLocaly() {
+  addCategoryLocally() {
     this.questionsService.categories$.pipe(
       tap(categories => {
         categories.push(this.categoryCtrl.value);
       })
     ).subscribe();
     this.categoryCtrl.setValue('');
+  }
+
+  addDifficultyLocally() {
+    this.questionsService.difficulties$.pipe(
+      tap(difficulties => {
+        difficulties.push(this.difficultyCtrl.value);
+      })
+    ).subscribe();
+    this.difficultyCtrl.setValue('');
+  }
+
+  updateDifficulty(newDifficulty: string) {
+    this.currentDifficulty = newDifficulty;
+    this.questionsService.getCategoriesFromServerByDifficulty(this.currentDifficulty);
   }
 
 }

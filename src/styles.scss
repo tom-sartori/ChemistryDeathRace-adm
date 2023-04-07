@@ -18,15 +18,15 @@ h1 {
 }
 
 .spinner {
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
-  left: 0;
-  right: 0;
+  position: fixed;
+  top: 45%;
+  left: 45%;
+  transform: translate(-50%, -50%);
   text-align: center;
   width: 150px;
   height: 150px;
-  animation: spinner 1s infinite;
+  z-index: 9999;
+  animation: 1s spinner infinite;
 }
 
 .spinner-image {

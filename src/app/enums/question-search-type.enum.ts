@@ -1,4 +1,5 @@
 export enum QuestionSearchType {
   QUESTION = 'name',
-  CATEGORY = 'category'
+  CATEGORY = 'category',
+  DIFFICULTY = 'difficulty'
 }

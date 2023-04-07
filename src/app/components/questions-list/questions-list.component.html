@@ -19,9 +19,9 @@
   <div *ngIf="loading$ | async" class="spinner">
     <img src="../../../assets/images/logo.png" alt="spinner" class="spinner-image">
   </div>
-  <mat-accordion *ngIf="questions$ | async as questions">
-    <mat-expansion-panel *ngFor="let question of questions">
-      <mat-expansion-panel-header style="margin-top: 20px">
+  <mat-accordion *ngIf="questions$ | async as questions" class="panel-wrapper">
+    <mat-expansion-panel *ngFor="let question of questions" class="custom-panel">
+      <mat-expansion-panel-header>
         <div class="infos">
           <h1 class="question">{{ question.name }}</h1>
           <p style="font-style: italic;">{{ question.category }}</p>
@@ -37,11 +37,13 @@
         </div>
       </mat-expansion-panel-header>
       <div class="infos">
+        <h4>Difficulté : {{ question.difficulty }}</h4>
         <p *ngIf="question.propositions.length == 1">La réponse</p>
         <p *ngIf="question.propositions.length > 1">Les réponses</p>
         <ul>
           <li *ngFor="let answer of question.propositions">
-            {{ answer.name }} <span *ngIf="answer.answer"> - Bonne réponse</span>
+            <span *ngIf="answer.answer" style="color: green">{{ answer.name }} - Bonne réponse</span>
+            <span *ngIf="!answer.answer" style="color: darkred">{{ answer.name }}</span>
           </li>
         </ul>
       </div>

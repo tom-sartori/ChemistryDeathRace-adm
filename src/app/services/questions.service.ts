@@ -24,6 +24,11 @@ export class QuestionsService {
     return this._categories$.asObservable();
   }
 
+  private _difficulties$ = new BehaviorSubject<String[]>([]);
+  get difficulties$(): Observable<String[]> {
+    return this._difficulties$.asObservable();
+  }
+
   private setLoadingStatus(loading: boolean) {
     this._loading$.next(loading);
   }
@@ -48,10 +53,21 @@ export class QuestionsService {
     ).subscribe();
   }
 
-  getCategoriesFromServer() {
+  getDifficultiesFromServer() {
     this.setLoadingStatus(true);
 
-    this.http.get<String[]>(`${environment.apiUrl}/question/category`).pipe(
+    this.http.get<String[]>(`${environment.apiUrl}/question/difficulty`).pipe(
+      tap(difficulties => {
+        this._difficulties$.next(difficulties);
+        this.setLoadingStatus(false);
+      })
+    ).subscribe();
+  }
+
+  getCategoriesFromServerByDifficulty(difficulty: string) {
+    this.setLoadingStatus(true);
+
+    this.http.get<String[]>(`${environment.apiUrl}/question/category/difficulty/${difficulty}`).pipe(
       tap(categories => {
         this._categories$.next(categories);
         this.setLoadingStatus(false);

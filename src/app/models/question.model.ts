@@ -2,6 +2,7 @@ export class Question {
   id!: string;
   name!: string;
   category!: string;
+  difficulty!: string;
   propositions!: [
     {
       name: string;
