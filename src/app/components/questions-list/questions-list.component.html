@@ -1,37 +1,38 @@
 <h1>Liste des questions</h1>
-<button class="newButton" mat-flat-button color="primary" (click)="onNewQuestion()" matTooltip="Créer une question" matTooltipPosition="right">
+<button class="newButton" mat-flat-button color="primary" (click)="onNewQuestion()" matTooltip="Créer une question"
+        matTooltipPosition="right">
   <mat-icon class="btn_icon">add</mat-icon>
 </button>
 <mat-card>
-  <mat-card-title-group>
-    <div class="form">
-      <mat-form-field appearance="fill" class="search-bar">
-        <input matInput type="text" [formControl]="searchCtrl">
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
-      <mat-form-field appearance="fill" class="search-type">
-        <mat-select [formControl]="searchTypeCtrl">
-          <mat-option *ngFor="let option of searchTypeOptions" [value]="option.value">{{ option.label }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </mat-card-title-group>
+
+
+  <app-questions-list-toolbar (onSearch)="search($event)"></app-questions-list-toolbar>
+
   <div *ngIf="loading$ | async" class="spinner">
     <img src="../../../assets/images/logo.png" alt="spinner" class="spinner-image">
   </div>
+
+  <ng-container *ngIf="!(loading$ | async)">
+    <ng-container *ngIf="questions$ | async as questions">
+      <p *ngIf="!questions.length">bite</p>
+    </ng-container>
+  </ng-container>
+
   <mat-accordion *ngIf="questions$ | async as questions" class="panel-wrapper">
     <mat-expansion-panel *ngFor="let question of questions" class="custom-panel">
       <mat-expansion-panel-header>
         <div class="infos">
           <h1 class="question">{{ question.name }}</h1>
-          <p style="font-style: italic;">{{ question.category }}</p>
+          <p style="font-style: italic;">{{ question.difficulty }} - {{ question.category }}</p>
         </div>
         <span class="spacer"></span>
         <div class="btns">
-          <button mat-icon-button (click)="onEditQuestion(question.id)" matTooltip="Modifier la question" matTooltipPosition="left">
+          <button mat-icon-button (click)="onEditQuestion(question.id)" matTooltip="Modifier la question"
+                  matTooltipPosition="left">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button (click)="onDeleteQuestion(question.id)" matTooltip="Supprimer la question" matTooltipPosition="right">
+          <button mat-icon-button (click)="onDeleteQuestion(question.id)" matTooltip="Supprimer la question"
+                  matTooltipPosition="right">
             <mat-icon>delete</mat-icon>
           </button>
         </div>

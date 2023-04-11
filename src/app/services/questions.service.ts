@@ -42,10 +42,18 @@ export class QuestionsService {
     );
   }
 
-  getQuestionsFromServer() {
+  getQuestionsFromServer(difficulty: string | null = null, category: string | null = null) {
     this.setLoadingStatus(true);
 
-    this.http.get<Question[]>(`${environment.apiUrl}/question`).pipe(
+    let url = `${environment.apiUrl}/question`;
+    if (difficulty) {
+      url += `/difficulty/${difficulty}`;
+      if (category) {
+        url += `/category/${category}`;
+      }
+    }
+
+    this.http.get<Question[]>(url).pipe(
       tap(games => {
         this._questions$.next(games);
         this.setLoadingStatus(false);
@@ -58,6 +66,7 @@ export class QuestionsService {
 
     this.http.get<String[]>(`${environment.apiUrl}/question/difficulty`).pipe(
       tap(difficulties => {
+        difficulties.sort();
         this._difficulties$.next(difficulties);
         this.setLoadingStatus(false);
       })

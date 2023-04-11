@@ -1,0 +1,28 @@
+<mat-card-title-group>
+  <form class="w-100" [formGroup]="form">
+
+    <mat-form-field appearance="fill" class="w-50">
+      <input matInput type="text" formControlName="questionName" placeholder="Rechercher une question">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-25">
+      <mat-select formControlName="difficulty" placeholder="Sélectionner une difficulté">
+        <mat-option [value]="null">Toutes les difficultées</mat-option>
+        <mat-option *ngFor='let difficulty of difficulties' [value]="difficulty">
+          {{ difficulty }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-25">
+      <mat-select formControlName="category" placeholder="Sélectionner une catégorie">
+        <mat-option [value]="null">Toutes les catégories</mat-option>
+        <mat-option *ngFor='let category of categories' [value]="category">
+          {{ category }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+</mat-card-title-group>

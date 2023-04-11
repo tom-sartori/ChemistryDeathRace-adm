@@ -1,11 +1,11 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {combineLatest, map, Observable, startWith} from "rxjs";
-import {FormBuilder, FormControl} from "@angular/forms";
+import {map, Observable} from "rxjs";
+import {FormBuilder} from "@angular/forms";
 import {Router} from "@angular/router";
 import {Question} from "../../models/question.model";
 import {QuestionsService} from "../../services/questions.service";
-import {QuestionSearchType} from "../../enums/question-search-type.enum";
 import {Notify} from "notiflix/build/notiflix-notify-aio";
+import {QuestionsListToolbar} from "./questions-list-toolbar/questions-list-toolbar";
 
 @Component({
   selector: 'app-questions-list',
@@ -14,58 +14,22 @@ import {Notify} from "notiflix/build/notiflix-notify-aio";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuestionsListComponent implements OnInit {
-
   loading$!: Observable<boolean>;
   questions$!: Observable<Question[]>
-  searchCtrl!: FormControl;
-  searchTypeCtrl!: FormControl;
-  searchTypeOptions!: {
-    value: QuestionSearchType,
-    label: string
-  }[];
+  private filter: QuestionsListToolbar;
 
-  constructor(private questionsService: QuestionsService,
-              private formBuilder: FormBuilder,
-              private router: Router) { }
+  constructor(
+    private questionsService: QuestionsService,
+    private formBuilder: FormBuilder,
+    private router: Router
+  ) {
+    this.filter = new QuestionsListToolbar('', null, null);
+  }
 
   ngOnInit(): void {
-    this.initForm();
-    this.questionsService.getQuestionsFromServer();
-    this.initObservables();
-    this.questionsService.questions$.subscribe();
-    this.searchTypeOptions = [
-      { value: QuestionSearchType.QUESTION, label: 'Question' },
-      { value: QuestionSearchType.CATEGORY, label: 'Catégorie' },
-      { value: QuestionSearchType.DIFFICULTY, label: 'Difficulté' }
-    ]
-  }
-
-  private initObservables() {
     this.loading$ = this.questionsService.loading$;
     this.questions$ = this.questionsService.questions$;
-    const search$ = this.searchCtrl.valueChanges.pipe(
-      startWith(this.searchCtrl.value),
-      map(value => value.toLowerCase())
-    );
-    const searchType$: Observable<QuestionSearchType> = this.searchTypeCtrl.valueChanges.pipe(
-      startWith(this.searchTypeCtrl.value)
-    );
-    this.questions$ = combineLatest([
-        search$,
-        searchType$,
-        this.questionsService.questions$
-      ]
-    ).pipe(
-      map(([search, searchType, games]) => games.filter(game => game[searchType]
-        .toLowerCase()
-        .includes(search as string))
-      )
-    );
-  }
-
-  private initForm() {
-    this.searchCtrl = this.formBuilder.control((''));
-    this.searchTypeCtrl = this.formBuilder.control((QuestionSearchType.QUESTION));
+    this.questionsService.getQuestionsFromServer();
   }
 
   onNewQuestion() {
@@ -77,7 +41,7 @@ export class QuestionsListComponent implements OnInit {
   }
 
   onDeleteQuestion(id: string) {
-    if (confirm("Voulez vous vraiment supprimer cette question ?")){
+    if (confirm("Voulez vous vraiment supprimer cette question ?")) {
       this.questions$.subscribe(
         (questions: Question[]) => {
           let question = questions.find(question => question.id === id);
@@ -87,5 +51,28 @@ export class QuestionsListComponent implements OnInit {
           }
         });
     }
+  }
+
+  search(value: QuestionsListToolbar): void {
+    if (value.difficulty !== this.filter.difficulty) {
+      value.category = null;
+    }
+    if (value.difficulty !== this.filter.difficulty || value.category !== this.filter.category) {
+      this.filterQuestions(value.difficulty, value.category);
+    }
+    if (value.questionName !== this.filter.questionName) {
+      this.filterByQuestionName(value.questionName)
+    }
+    this.filter = value;
+  }
+
+  private filterByQuestionName(search: string) {
+    this.questions$ = this.questionsService.questions$.pipe(
+      map(questions => questions.filter(question => question.name.toLowerCase().includes(search)))
+    );
+  }
+
+  private filterQuestions(difficulty: string | null, category: string | null) {
+    this.questionsService.getQuestionsFromServer(difficulty, category);
   }
 }

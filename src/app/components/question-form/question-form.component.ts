@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Observable, startWith, switchMap, tap} from "rxjs";
+import {Observable, switchMap, tap} from "rxjs";
 import {Question} from "../../models/question.model";
 import {QuestionsService} from "../../services/questions.service";
 import {ActivatedRoute, Router} from "@angular/router";
