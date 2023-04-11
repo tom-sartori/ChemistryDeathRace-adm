@@ -4,7 +4,7 @@
     <div class="inputs">
       <mat-form-field>
         <mat-label>Adresse e-mail</mat-label>
-        <input matInput type="email" [formControl]="emailCtrl">
+        <input matInput type="email" [formControl]="emailCtrl" (keydown)="onEnter($event)">
         <mat-error *ngIf="emailCtrl.hasError('required')">
           Ce champ est requis
         </mat-error>
@@ -14,7 +14,7 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Mot de passe</mat-label>
-        <input matInput [type]="hide ? 'password' : 'text'" [formControl]="passwordCtrl">
+        <input matInput [type]="hide ? 'password' : 'text'" [formControl]="passwordCtrl" (keydown)="onEnter($event)">
         <mat-icon matSuffix (click)="changeHide()">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         <mat-error *ngIf="passwordCtrl.hasError('required')">
           Ce champ est requis
@@ -25,6 +25,9 @@
       <button mat-flat-button color="primary" (click)="signIn()"  [disabled]="!(emailCtrl.valid && passwordCtrl.valid)">
         Se connecter
       </button>
+    </div>
+    <div class="spinner" *ngIf="loading$ | async">
+      <img src="./assets/images/logo.png" alt="spinner" class="spinner-image">
     </div>
   </mat-card-content>
 </mat-card>

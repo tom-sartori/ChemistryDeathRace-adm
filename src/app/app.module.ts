@@ -11,9 +11,6 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {ErrorComponent} from "./components/error/error.component";
 import {HeaderComponent} from "./components/header/header.component";
 import {AuthService} from "./services/auth.service";
-import {firebaseConfig} from "../firebase-config";
-import {AngularFireAuthModule} from "@angular/fire/compat/auth";
-import {AngularFireModule} from "@angular/fire/compat";
 import {QuestionFormComponent} from "./components/question-form/question-form.component";
 import {SigninComponent} from "./components/signin/signin.component";
 import {RouterModule} from "@angular/router";
@@ -36,8 +33,6 @@ import { QuestionsListToolbarComponent } from './components/questions-list/quest
     NoopAnimationsModule,
     SharedModule,
     HttpClientModule,
-    AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireAuthModule,
     RouterModule
   ],
   exports: [
