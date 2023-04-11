@@ -5,7 +5,6 @@
 </button>
 <mat-card>
 
-
   <app-questions-list-toolbar (onSearch)="search($event)"></app-questions-list-toolbar>
 
   <div *ngIf="loading$ | async" class="spinner">
@@ -14,7 +13,7 @@
 
   <ng-container *ngIf="!(loading$ | async)">
     <ng-container *ngIf="questions$ | async as questions">
-      <p *ngIf="!questions.length">bite</p>
+      <p *ngIf="!questions.length">Aucune question disponible. </p>
     </ng-container>
   </ng-container>
 

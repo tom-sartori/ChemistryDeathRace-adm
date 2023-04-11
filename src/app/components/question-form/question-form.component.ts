@@ -110,7 +110,7 @@ export class QuestionFormComponent implements OnInit {
   }
 
   private saveQuestion() {
-    let newQuestion : Question = {
+    let newQuestion: Question = {
       ...this.mainForm.value,
     }
     this.questionsService.saveQuestion(newQuestion).pipe(
@@ -127,7 +127,7 @@ export class QuestionFormComponent implements OnInit {
   }
 
   private updateQuestion() {
-    let updatedQuestion : Question = {
+    let updatedQuestion: Question = {
       ...this.mainForm.value,
       id: this.currentQuestionId
     }
@@ -157,15 +157,23 @@ export class QuestionFormComponent implements OnInit {
     }));
   }
 
-  removeAnswer() {
-    this.propositions.removeAt(this.propositions.length - 1);
+  removeAnswer(index: number): void {
+    if (0 <= index && index < this.propositions.length) {
+      if (this.propositions.controls[index].get('answer')?.value) {
+        // If proposition is answer, set first proposition as answer.
+        this.propositions.removeAt(index);
+        this.propositions.controls[0].patchValue({answer: true});
+      } else {
+        this.propositions.removeAt(index);
+      }
+    }
   }
 
   updateCorrectAnswer(index: number) {
     this.propositions.controls.forEach((control) => {
       control.get('answer')?.setValue(false);
     });
-    this.propositions.controls[index].patchValue({ answer: true });
+    this.propositions.controls[index].patchValue({answer: true});
   }
 
   addCategoryLocally() {

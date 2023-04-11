@@ -15,14 +15,18 @@
     <p>Choisir une difficulté : </p>
     <div class="form-row">
       <mat-radio-group formControlName="difficulty" class="radio-group" *ngIf="difficulties$ | async as difficulties">
-        <mat-radio-button *ngFor="let difficulty of difficulties" [value]="difficulty" (click)="updateDifficulty(difficulty.toString())">{{ difficulty }}</mat-radio-button>
+        <mat-radio-button *ngFor="let difficulty of difficulties" [value]="difficulty"
+                          (click)="updateDifficulty(difficulty.toString())">{{ difficulty }}</mat-radio-button>
       </mat-radio-group>
     </div>
     <div class="form-row" *ngIf="difficulties$ | async as difficulties">
       <mat-form-field appearance="fill">
         <mat-label>Ajouter une difficulté</mat-label>
         <input type="text" matInput [formControl]="difficultyCtrl">
-        <button mat-flat-button matSuffix style="background-color: transparent" aria-label="Clear" (click)="addDifficultyLocally()">Ajouter</button>
+        <button mat-flat-button matSuffix style="background-color: transparent" aria-label="Clear"
+                (click)="addDifficultyLocally()" [disabled]="!difficultyCtrl.value">
+          Ajouter
+        </button>
       </mat-form-field>
     </div>
     <ng-container *ngIf="currentDifficulty != ''">
@@ -37,7 +41,10 @@
           <mat-form-field appearance="fill">
             <mat-label>Ajouter une catégorie</mat-label>
             <input type="text" matInput [formControl]="categoryCtrl">
-            <button mat-flat-button matSuffix style="background-color: transparent" aria-label="Clear" (click)="addCategoryLocally()">Ajouter</button>
+            <button mat-flat-button matSuffix style="background-color: transparent" aria-label="Clear"
+                    (click)="addCategoryLocally()" [disabled]="!categoryCtrl.value">
+              Ajouter
+            </button>
           </mat-form-field>
         </div>
       </ng-container>
@@ -48,32 +55,45 @@
     <mat-card-subtitle>Réponses</mat-card-subtitle>
     <div formArrayName="propositions">
       <div class="form-row" *ngFor="let answer of propositions.controls; let i = index" [formGroupName]="i">
+        <button *ngIf="propositions.length > 1" mat-icon-button color="warn" (click)="removeAnswer(i)"
+                matTooltip="Supprimer la réponse" matTooltipPosition="left">
+          <mat-icon>delete</mat-icon>
+        </button>
         <mat-form-field appearance="fill">
           <mat-label>Réponse {{ i + 1 }}</mat-label>
           <input type="text" matInput formControlName="name" required>
           <mat-error>Ce champ est requis</mat-error>
         </mat-form-field>
         <mat-radio-group (change)="updateCorrectAnswer(i)" formControlName="answer">
-          <mat-radio-button style="margin-left: 10px; margin-bottom: 15px" [value]="true" [checked]="answer.get('answer')?.value">Bonne réponse</mat-radio-button>
+          <mat-radio-button style="margin-left: 10px; margin-bottom: 15px" [value]="true"
+                            [checked]="answer.get('answer')?.value">Bonne réponse
+          </mat-radio-button>
         </mat-radio-group>
       </div>
       <div>
-        <button mat-flat-button color="primary" (click)="addAnswer()" *ngIf="propositions.length < 4">Ajouter une réponse +</button>
-        <button mat-flat-button color="primary" (click)="removeAnswer()" *ngIf="propositions.length > 1">Enlever une réponse -</button>
+        <button mat-flat-button color="primary" (click)="addAnswer()" *ngIf="propositions.length < 4"
+                [disabled]="!propositions.at(propositions.length - 1).value.name.length">
+          Ajouter une réponse +
+        </button>
       </div>
     </div>
 
   </mat-card>
 
-  <mat-card-actions *ngIf="mainForm.valid">
-    <button *ngIf="!currentQuestionId" mat-flat-button color="primary" (click)="onSubmitForm()" [disabled]="loading$ | async" matTooltip="Enregister la nouvelle question" matTooltipPosition="left">
+  <mat-card-actions>
+    <button *ngIf="!currentQuestionId" mat-flat-button color="primary" (click)="onSubmitForm()"
+            [disabled]="(loading$ | async) || (!mainForm.valid)" matTooltip="Enregister la nouvelle question"
+            matTooltipPosition="left">
       <mat-icon class="btn_icon">save</mat-icon>
     </button>
-    <button *ngIf="currentQuestionId" mat-flat-button color="primary" (click)="onSubmitForm()" [disabled]="loading$ | async" matTooltip="Sauvegarder la question" matTooltipPosition="left">
+    <button *ngIf="currentQuestionId" mat-flat-button color="primary" (click)="onSubmitForm()"
+            [disabled]="(loading$ | async) || (!mainForm.valid)" matTooltip="Sauvegarder la question"
+            matTooltipPosition="left">
       <mat-icon class="btn_icon">save</mat-icon>
     </button>
   </mat-card-actions>
-  <button mat-flat-button color="primary" (click)="onGoBack()" [disabled]="loading$ | async" matTooltip="Retour" matTooltipPosition="right">
+  <button mat-flat-button color="primary" (click)="onGoBack()" [disabled]="loading$ | async" matTooltip="Retour"
+          matTooltipPosition="right">
     <mat-icon class="btn_icon">arrow_back</mat-icon>
   </button>
   <div class="spinner" *ngIf="loading$ | async">
