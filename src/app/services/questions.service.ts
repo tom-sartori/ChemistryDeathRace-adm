@@ -29,7 +29,7 @@ export class QuestionsService {
     return this._difficulties$.asObservable();
   }
 
-  private setLoadingStatus(loading: boolean) {
+  public setLoadingStatus(loading: boolean) {
     this._loading$.next(loading);
   }
 
@@ -63,7 +63,7 @@ export class QuestionsService {
 
   getDifficultiesFromServer() {
     this.setLoadingStatus(true);
-
+    console.log('getDifficultiesFromServer', this._difficulties$.value);
     this.http.get<String[]>(`${environment.apiUrl}/question/difficulty`).pipe(
       tap(difficulties => {
         difficulties.sort();
@@ -71,6 +71,11 @@ export class QuestionsService {
         this.setLoadingStatus(false);
       })
     ).subscribe();
+  }
+
+  getDifficultiesObservable() : Observable<string[]> {
+    this.setLoadingStatus(true);
+    return this.http.get<string[]>(`${environment.apiUrl}/question/difficulty`);
   }
 
   getCategoriesFromServerByDifficulty(difficulty: string) {
@@ -82,6 +87,11 @@ export class QuestionsService {
         this.setLoadingStatus(false);
       })
     ).subscribe();
+  }
+
+  getCategoriesObservable(difficulty: string) : Observable<string[]> {
+    this.setLoadingStatus(true);
+    return this.http.get<string[]>(`${environment.apiUrl}/question/category/difficulty/${difficulty}`);
   }
 
   getQuestionById(id: string): Observable<Question> {

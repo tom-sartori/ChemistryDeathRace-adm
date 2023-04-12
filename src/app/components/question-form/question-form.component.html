@@ -14,12 +14,12 @@
     </div>
     <p>Choisir une difficulté : </p>
     <div class="form-row">
-      <mat-radio-group formControlName="difficulty" class="radio-group" *ngIf="difficulties$ | async as difficulties">
+      <mat-radio-group formControlName="difficulty" class="radio-group" *ngIf="localDifficulties as difficulties">
         <mat-radio-button *ngFor="let difficulty of difficulties" [value]="difficulty"
                           (click)="updateDifficulty(difficulty.toString())">{{ difficulty }}</mat-radio-button>
       </mat-radio-group>
     </div>
-    <div class="form-row" *ngIf="difficulties$ | async as difficulties">
+    <div class="form-row" *ngIf="localDifficulties as difficulties">
       <mat-form-field appearance="fill">
         <mat-label>Ajouter une difficulté</mat-label>
         <input type="text" matInput [formControl]="difficultyCtrl">
@@ -32,11 +32,11 @@
     <ng-container *ngIf="currentDifficulty != ''">
       <p>Choisir une catégorie : </p>
       <div class="form-row">
-        <mat-radio-group formControlName="category" class="radio-group" *ngIf="categories$ | async as categories">
+        <mat-radio-group formControlName="category" class="radio-group" *ngIf="localCategories as categories">
           <mat-radio-button *ngFor="let category of categories" [value]="category">{{ category }}</mat-radio-button>
         </mat-radio-group>
       </div>
-      <ng-container *ngIf="categories$ | async as categories">
+      <ng-container *ngIf="localCategories as categories">
         <div class="form-row" *ngIf="categories.length < 6">
           <mat-form-field appearance="fill">
             <mat-label>Ajouter une catégorie</mat-label>

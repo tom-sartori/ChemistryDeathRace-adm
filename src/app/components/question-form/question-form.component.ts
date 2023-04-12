@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Observable, switchMap, tap} from "rxjs";
+import {Observable, of, switchMap, tap} from "rxjs";
 import {Question} from "../../models/question.model";
 import {QuestionsService} from "../../services/questions.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -22,8 +22,8 @@ export class QuestionFormComponent implements OnInit {
   difficultyCtrl!: FormControl;
 
   question$!: Observable<Question>;
-  categories$!: Observable<String[]>;
-  difficulties$!: Observable<String[]>;
+  localDifficulties: string[] = [];
+  localCategories: string[] = [];
   currentQuestionId!: string;
   currentDifficulty: string = '';
 
@@ -35,9 +35,21 @@ export class QuestionFormComponent implements OnInit {
   ngOnInit(): void {
     this.initMainForm();
     this.initOptions();
-    this.categories$ = this.questionsService.categories$;
-    this.difficulties$ = this.questionsService.difficulties$;
     this.loading$ = this.questionsService.loading$;
+    this.route.url.pipe(
+      switchMap(() => {
+        this.initDifficulties();
+        console.log("switchMap");
+        return of(null);
+      })
+    ).subscribe();
+  }
+
+  private initDifficulties() {
+    this.questionsService.getDifficultiesObservable().subscribe( x => {
+      this.localDifficulties = x;
+      this.questionsService.setLoadingStatus(false);
+    });
   }
 
   private initMainForm(): void {
@@ -61,6 +73,8 @@ export class QuestionFormComponent implements OnInit {
 
   private resetForm(){
     this.mainForm.reset();
+    this.propositions.clear();
+    this.questionsService.getDifficultiesFromServer();
   }
 
   private initOptions() {
@@ -177,26 +191,21 @@ export class QuestionFormComponent implements OnInit {
   }
 
   addCategoryLocally() {
-    this.questionsService.categories$.pipe(
-      tap(categories => {
-        categories.push(this.categoryCtrl.value);
-      })
-    ).subscribe();
+    this.localCategories.push(this.categoryCtrl.value);
     this.categoryCtrl.setValue('');
   }
 
   addDifficultyLocally() {
-    this.questionsService.difficulties$.pipe(
-      tap(difficulties => {
-        difficulties.push(this.difficultyCtrl.value);
-      })
-    ).subscribe();
+    this.localDifficulties.push(this.difficultyCtrl.value);
     this.difficultyCtrl.setValue('');
   }
 
   updateDifficulty(newDifficulty: string) {
     this.currentDifficulty = newDifficulty;
-    this.questionsService.getCategoriesFromServerByDifficulty(this.currentDifficulty);
+    this.questionsService.getCategoriesObservable(newDifficulty).subscribe( x => {
+      this.localCategories = x;
+      this.questionsService.setLoadingStatus(false);
+    });
   }
 
 }
