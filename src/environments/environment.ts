@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'https://gm7bzjcpwb.execute-api.eu-west-3.amazonaws.com',
-  authServiceUrl: 'https://v7efni62b0.execute-api.eu-west-3.amazonaws.com',
+  authServiceUrl: 'https://c4i6be0ggj.execute-api.eu-west-3.amazonaws.com',
 };
 
 /*
