@@ -70,7 +70,7 @@ export class AuthService {
 
   public get() : Observable<any> {
     this.setLoadingStatus(true);
-    return this.http.get<any>(environment.authServiceUrl + '/user');
+    return this.http.get<any>(environment.authServiceUrl + '/user/enable');
   }
 
   private hash(text: string): string {
