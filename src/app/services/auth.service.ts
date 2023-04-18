@@ -41,6 +41,16 @@ export class AuthService {
     )
   }
 
+  signUp(email: string, password: string) {
+    this.setLoadingStatus(true);
+    this.http.post(environment.authServiceUrl + '/user/register', {email: email, password: password}).subscribe(
+      (response: any) => {
+        this.router.navigateByUrl("/signin");
+        this.setLoadingStatus(false);
+      }
+    )
+  }
+
   get isLoggedIn(): boolean {
     const token = JSON.parse(localStorage.getItem('token')!);
     if (token !== null){

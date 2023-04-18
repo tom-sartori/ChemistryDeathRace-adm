@@ -16,6 +16,7 @@ import {SigninComponent} from "./components/signin/signin.component";
 import {RouterModule} from "@angular/router";
 import {AuthInterceptor} from "./interceptors/auth.interceptor";
 import { QuestionsListToolbarComponent } from './components/questions-list/questions-list-toolbar/questions-list-toolbar.component';
+import { SignupComponent } from './components/signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { QuestionsListToolbarComponent } from './components/questions-list/quest
     ErrorComponent,
     HeaderComponent,
     SigninComponent,
-    QuestionsListToolbarComponent
+    QuestionsListToolbarComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,

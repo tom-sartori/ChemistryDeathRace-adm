@@ -1,0 +1,43 @@
+<h1>Connexion</h1>
+<mat-card>
+  <mat-card-content>
+    <div class="inputs">
+      <mat-form-field>
+        <mat-label>Adresse e-mail</mat-label>
+        <input matInput type="email" [formControl]="emailCtrl" (keydown)="onEnter($event)">
+        <mat-error *ngIf="emailCtrl.hasError('required')">
+          Ce champ est requis
+        </mat-error>
+        <mat-error *ngIf="emailCtrl.hasError('email')">
+          L'adresse e-mail n'est pas valide
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Mot de passe</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" [formControl]="passwordCtrl" (keydown)="onEnter($event)">
+        <mat-icon matSuffix (click)="changeHide()">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="passwordCtrl.hasError('required')">
+          Ce champ est requis
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Confirmer le mot de passe</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" [formControl]="confirmCtrl" (keydown)="onEnter($event)">
+        <mat-icon matSuffix (click)="changeHide()">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="passwordCtrl.hasError('required')">
+          Ce champ est requis
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="connection-buttons">
+      <button mat-flat-button color="primary" (click)="signUp()"  [disabled]="!(emailCtrl.valid && passwordCtrl.valid && confirmCtrl.valid)">
+        S'inscrire
+      </button>
+    </div>
+    <div class="spinner" *ngIf="loading$ | async">
+      <img src="./assets/images/logo.png" alt="spinner" class="spinner-image">
+    </div>
+  </mat-card-content>
+</mat-card>
+
+

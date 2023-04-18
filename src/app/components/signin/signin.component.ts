@@ -5,7 +5,7 @@ import {Observable} from "rxjs";
 
 
 @Component({
-  selector: 'app-auth',
+  selector: 'app-auth-signin',
   templateUrl: './signin.component.html',
   styleUrls: ['./signin.component.scss']
 })
