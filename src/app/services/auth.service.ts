@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
+import * as CryptoJS from 'crypto-js';
 
 @Injectable()
 export class AuthService {
@@ -24,13 +25,14 @@ export class AuthService {
     this._isUserLoggedIn$.next(value);
   }
 
-  constructor(public router: Router, private http: HttpClient) {
-
-  }
+  constructor(
+    public router: Router,
+    private http: HttpClient
+  ) { }
 
   signIn(email: string, password: string) {
     this.setLoadingStatus(true);
-    this.http.post(environment.authServiceUrl + '/user/login', {email: email, password: password}).subscribe(
+    this.http.post(environment.authServiceUrl + '/user/login', {email: email, password: this.hash(password)}).subscribe(
       (response: any) => {
         localStorage.setItem('token', JSON.stringify(response));
         this.setIsUserLoggedIn$(true);
@@ -42,7 +44,7 @@ export class AuthService {
 
   signUp(email: string, password: string) {
     this.setLoadingStatus(true);
-    this.http.post(environment.authServiceUrl + '/user/register', {email: email, password: password}).subscribe(
+    this.http.post(environment.authServiceUrl + '/user/register', {email: email, password: this.hash(password)}).subscribe(
       (response: any) => {
         this.router.navigateByUrl("/signin");
         this.setLoadingStatus(false);
@@ -69,5 +71,9 @@ export class AuthService {
   public get() : Observable<any> {
     this.setLoadingStatus(true);
     return this.http.get<any>(environment.authServiceUrl + '/user');
+  }
+
+  private hash(text: string): string {
+    return CryptoJS.SHA256(text).toString()
   }
 }
