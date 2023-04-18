@@ -39,7 +39,6 @@ export class QuestionFormComponent implements OnInit {
     this.route.url.pipe(
       switchMap(() => {
         this.initDifficulties();
-        console.log("switchMap");
         return of(null);
       })
     ).subscribe();
@@ -134,7 +133,6 @@ export class QuestionFormComponent implements OnInit {
           Notify.success("La question a bien été ajoutée")
         } else {
           Notify.failure("Une erreur est survenue lors de l'enregistrement de la question")
-          console.log("An error as occurred during saving data")
         }
       })
     ).subscribe();
@@ -152,7 +150,6 @@ export class QuestionFormComponent implements OnInit {
           Notify.success("La question a bien été modifiée")
         } else {
           Notify.failure("Une erreur est survenue lors de l'enregistrement de la question")
-          console.log("An error as occurred during saving data")
         }
       })
     ).subscribe();

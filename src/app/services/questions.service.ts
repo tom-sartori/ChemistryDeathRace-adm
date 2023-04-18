@@ -63,7 +63,6 @@ export class QuestionsService {
 
   getDifficultiesFromServer() {
     this.setLoadingStatus(true);
-    console.log('getDifficultiesFromServer', this._difficulties$.value);
     this.http.get<String[]>(`${environment.apiUrl}/question/difficulty`).pipe(
       tap(difficulties => {
         difficulties.sort();

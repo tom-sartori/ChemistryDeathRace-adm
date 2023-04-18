@@ -20,6 +20,8 @@
     "@angular/platform-browser": "^14.2.0",
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/router": "^14.2.0",
+    "@types/crypto-js": "^4.1.1",
+    "crypto-js": "^4.1.1",
     "notiflix": "^3.2.6",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

@@ -24,7 +24,7 @@ export class SigninComponent implements OnInit {
     this.emailCtrl = new FormControl('', [Validators.required, Validators.email]);
     this.passwordCtrl = new FormControl('', [Validators.required, Validators.minLength(6)]);
     this.loading$ = this.authService.loading$;
-    this.get();
+    // this.get();
   }
 
   changeHide() {
@@ -32,7 +32,9 @@ export class SigninComponent implements OnInit {
   }
 
   signIn() {
-    this.authService.signIn(this.emailCtrl.value, this.passwordCtrl.value);
+    this.authService.get().subscribe(x => {
+      this.authService.signIn(this.emailCtrl.value, this.passwordCtrl.value);
+    })
   }
 
   onEnter(event: KeyboardEvent) {
@@ -41,7 +43,4 @@ export class SigninComponent implements OnInit {
     }
   }
 
-  private get() {
-    this.authService.get();
-  }
 }

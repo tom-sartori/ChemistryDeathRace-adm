@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import {BehaviorSubject, Observable} from "rxjs";
-import {Notify} from "notiflix/build/notiflix-notify-aio";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 
@@ -67,7 +66,8 @@ export class AuthService {
     this.setIsUserLoggedIn$(false);
   }
 
-  public get() {
+  public get() : Observable<any> {
+    this.setLoadingStatus(true);
     return this.http.get<any>(environment.authServiceUrl + '/user');
   }
 }
