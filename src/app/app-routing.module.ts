@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: 'questions/add', component: QuestionFormComponent, canActivate: [AuthGuard]},
   { path: 'questions/update/:id', component: QuestionFormComponent, canActivate: [AuthGuard]},
   { path: 'error404', component: ErrorComponent},
-  { path: 'login', component: SigninComponent},
+  { path: 'signin', component: SigninComponent},
   { path: '', redirectTo: 'questions', pathMatch: 'full'},
   { path: '**', redirectTo: 'error404'}
 ];
