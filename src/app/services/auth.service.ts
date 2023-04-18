@@ -66,4 +66,8 @@ export class AuthService {
     this.router.navigateByUrl("/signin");
     this.setIsUserLoggedIn$(false);
   }
+
+  public get() {
+    return this.http.get<any>(environment.authServiceUrl + '/user');
+  }
 }
