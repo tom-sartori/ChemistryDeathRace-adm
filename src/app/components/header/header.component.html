@@ -1,6 +1,8 @@
 <mat-toolbar color="primary">
   <a routerLink="/questions" class="home-link"><img class="logo" src="assets/images/logo.png" alt="logo"></a>
   <span class="spacer"></span>
+  <h1 class="title">Chemical Pursuit</h1>
+  <span class="spacer"></span>
   <ul *ngIf="isUserLoggedIn" class="menu-horizontal">
     <li><a (click)="logout()" style="cursor: pointer">Déconnexion</a></li>
   </ul>
