@@ -1,22 +1,28 @@
 <mat-toolbar color="primary">
-  <a routerLink="/questions" class="home-link"><img class="logo" src="assets/images/logo.png" alt="logo"></a>
-  <span class="spacer"></span>
-  <h1 class="title">Chemical Pursuit</h1>
-  <span class="spacer"></span>
-  <ul *ngIf="isUserLoggedIn" class="menu-horizontal">
-    <li><a (click)="logout()" style="cursor: pointer">Déconnexion</a></li>
-  </ul>
+  <div class="toolbar-row">
+    <div class="left-section">
+      <a routerLink="/questions" class="home-link"><img class="logo" src="assets/images/logo.png" alt="logo"></a>
+    </div>
+    <div class="center-section">
+      <h1 class="title">Chemical Pursuit</h1>
+    </div>
+    <div class="right-section">
+      <ul *ngIf="isUserLoggedIn" class="menu-horizontal">
+        <li><a (click)="logout()" style="cursor: pointer">Déconnexion</a></li>
+      </ul>
 
-
-  <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menu"  class="menu-button">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <mat-menu #menu="matMenu" class="menu-button">
-    <a (click)="logout()" *ngIf="isUserLoggedIn" >
-      <button mat-menu-item>
-        <mat-icon>logout</mat-icon>
-        <span>Déconnexion</span>
+      <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menu"  class="menu-button">
+        <mat-icon>menu</mat-icon>
       </button>
-    </a>
-  </mat-menu>
+
+      <mat-menu #menu="matMenu" class="menu-button">
+        <a (click)="logout()" *ngIf="isUserLoggedIn" >
+          <button mat-menu-item>
+            <mat-icon>logout</mat-icon>
+            <span>Déconnexion</span>
+          </button>
+        </a>
+      </mat-menu>
+    </div>
+  </div>
 </mat-toolbar>
