@@ -18,20 +18,22 @@ h1 {
 }
 
 .spinner {
-  position: fixed;
-  top: 45%;
-  left: 45%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  width: 150px;
-  height: 150px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
   z-index: 9999;
-  animation: 1s spinner infinite;
 }
 
 .spinner-image {
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 30%;
+  max-height: 30%;
+  animation: 1s spinner infinite;
 }
 
 @keyframes spinner {
