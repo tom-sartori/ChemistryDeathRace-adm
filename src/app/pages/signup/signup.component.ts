@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../../services/auth.service";
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
-import { Observable } from "rxjs";
+import { Router } from '@angular/router';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 
 @Component({
@@ -11,18 +12,17 @@ import { Observable } from "rxjs";
 })
 export class SignupComponent implements OnInit {
 
-  registerForm!: FormGroup;
-  emailCtrl!: FormControl;
-  passwordCtrl!: FormControl;
-  confirmCtrl!: FormControl;
+  public registerForm: FormGroup;
+  public emailCtrl: FormControl;
+  public passwordCtrl: FormControl;
+  public confirmCtrl: FormControl;
 
-  loading$!: Observable<boolean>
+  public loading: boolean;
+  public hide: boolean;
 
-  hide: boolean = true;
-
-  constructor(public authService: AuthService) {}
-
-  ngOnInit(): void {
+  constructor(public authService: AuthService, private router: Router) {
+    this.loading = false;
+    this.hide = true;
     this.emailCtrl = new FormControl('', [Validators.required, Validators.email]);
     this.passwordCtrl = new FormControl('', [Validators.required, Validators.minLength(6)]);
     this.confirmCtrl = new FormControl('', [Validators.required, Validators.minLength(6)]);
@@ -34,10 +34,12 @@ export class SignupComponent implements OnInit {
       validators: this.matchValuesValidator('passwordCtrl', 'confirmCtrl'),
       updateOn: 'blur'
     });
-    this.loading$ = this.authService.loading$;
   }
 
-  matchValuesValidator(main: string, confirm: string): ValidatorFn {
+  ngOnInit(): void {
+  }
+
+  private matchValuesValidator(main: string, confirm: string): ValidatorFn {
     return (ctrl: AbstractControl): null | ValidationErrors => {
       if (!ctrl.get(main) || !ctrl.get(confirm)) {
         return {
@@ -56,15 +58,25 @@ export class SignupComponent implements OnInit {
     };
   }
 
-  changeHide() {
+  public changeHide(): void {
     this.hide = !this.hide;
   }
 
-  signUp() {
-    this.authService.signUp(this.emailCtrl.value, this.passwordCtrl.value);
+  public signUp(): void {
+    this.loading = true;
+    this.authService.signUp(this.emailCtrl.value, this.passwordCtrl.value).subscribe((response) => {
+      if (response) {
+        Notify.success("Votre compte a bien été créé !");
+        this.router.navigateByUrl("/signin");
+      }
+      else {
+        Notify.failure("Une erreur est survenue lors de la création de votre compte !");
+      }
+      this.loading = false;
+    })
   }
 
-  onEnter(event: KeyboardEvent) {
+  public onEnter(event: KeyboardEvent): void {
     if (event.key === "Enter") {
       this.signUp();
     }
