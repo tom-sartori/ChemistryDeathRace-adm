@@ -1,7 +1,7 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {QuestionsListToolbar} from "./questions-list-toolbar";
-import {QuestionsService} from "../../../services/questions.service";
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { QuestionsListToolbar } from "./questions-list-toolbar";
+import { QuestionsService } from "../../../services/questions.service";
 
 @Component({
   selector: 'app-questions-list-toolbar',

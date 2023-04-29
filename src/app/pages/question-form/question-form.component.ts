@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Observable, of, switchMap, tap} from "rxjs";
-import {Question} from "../../models/question.model";
-import {QuestionsService} from "../../services/questions.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Notify} from "notiflix/build/notiflix-notify-aio";
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Observable, of, switchMap, tap } from "rxjs";
+import { Question } from "../../models/question.model";
+import { QuestionsService } from "../../services/questions.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Notify } from "notiflix/build/notiflix-notify-aio";
 
 @Component({
   selector: 'app-question-form',

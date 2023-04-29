@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from "../../services/auth.service";
-import {FormControl, Validators} from "@angular/forms";
-import {Observable} from "rxjs";
+import { AuthService } from "../../services/auth.service";
+import { FormControl, Validators } from "@angular/forms";
+import { Observable } from "rxjs";
 
 
 @Component({
