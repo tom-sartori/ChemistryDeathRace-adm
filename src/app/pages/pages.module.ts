@@ -12,11 +12,13 @@ import { SharedModule } from "../shared/shared.module";
 import { QuestionsService } from "../services/questions.service";
 import { AuthService } from "../services/auth.service";
 import { RouterModule, Routes } from "@angular/router";
+import { CategoriesListComponent } from './categories-list/categories-list.component';
 
 const routes: Routes = [
   {path: 'questions', component: QuestionsListComponent},
   {path: 'questions/add', component: QuestionFormComponent},
   {path: 'questions/update/:id', component: QuestionFormComponent},
+  {path: 'categories', component: CategoriesListComponent},
   {path: 'error404', component: ErrorComponent},
   {path: 'signin', component: SigninComponent},
   {path: 'abcd/efgh/register', component: SignupComponent},
@@ -32,7 +34,8 @@ const routes: Routes = [
     ErrorComponent,
     SigninComponent,
     QuestionsListToolbarComponent,
-    SignupComponent
+    SignupComponent,
+    CategoriesListComponent
   ],
   imports: [
     SharedModule,

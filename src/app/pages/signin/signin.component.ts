@@ -41,6 +41,7 @@ export class SigninComponent implements OnInit {
           if (response.token) {
             localStorage.setItem('token', JSON.stringify(response));
             this.authService.setIsUserLoggedIn(true);
+            document.dispatchEvent(new Event('logged-in'));
             this.router.navigateByUrl("/questions").catch((error) => {
               Notify.failure("Erreur de redirection : " + error.message);
             });

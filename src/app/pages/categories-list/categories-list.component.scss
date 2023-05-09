@@ -1,0 +1,47 @@
+mat-button-toggle-group {
+  width: 100%;
+  justify-content: center;
+  overflow-x: scroll;
+}
+
+mat-button-toggle {
+  width: 100%;
+}
+
+mat-list-item {
+  border-bottom: gray thin solid;
+  border-radius: 10px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+h4 {
+  margin: 0;
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+input {
+  width: 100%;
+  margin: 0;
+}
+
+.difficulty {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 15px;
+}
+
+.difficulty > h2 {
+  margin: 0 10px 0 0;
+}
+
+.alert-categories {
+  text-align: center;
+}

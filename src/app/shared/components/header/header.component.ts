@@ -19,6 +19,9 @@ export class HeaderComponent implements OnInit {
       this.isUserLoggedIn = value;
     });
     this.isUserLoggedIn = this.authService.isLoggedIn
+    document.addEventListener('logged-in', () => {
+      this.isUserLoggedIn = true;
+    });
   }
 
   logout() {

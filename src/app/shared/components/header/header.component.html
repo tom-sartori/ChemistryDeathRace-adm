@@ -9,6 +9,8 @@
     </div>
     <div class="right-section">
       <ul *ngIf="isUserLoggedIn" class="menu-horizontal">
+        <li><a routerLink="/questions" routerLinkActive="active">Questions</a></li>
+        <li><a routerLink="/categories" routerLinkActive="active">Catégories</a></li>
         <li><a (click)="logout()" style="cursor: pointer">Déconnexion</a></li>
       </ul>
 
@@ -17,7 +19,19 @@
       </button>
 
       <mat-menu #menu="matMenu" class="menu-button">
-        <a (click)="logout()" *ngIf="isUserLoggedIn" >
+        <a routerLink="/questions" *ngIf="isUserLoggedIn">
+          <button mat-menu-item>
+            <mat-icon>quiz</mat-icon>
+            <span>Questions</span>
+          </button>
+        </a>
+        <a routerLink="/categories" *ngIf="isUserLoggedIn">
+          <button mat-menu-item>
+            <mat-icon>category</mat-icon>
+            <span>Catégories</span>
+          </button>
+        </a>
+        <a (click)="logout()" *ngIf="isUserLoggedIn">
           <button mat-menu-item>
             <mat-icon>logout</mat-icon>
             <span>Déconnexion</span>

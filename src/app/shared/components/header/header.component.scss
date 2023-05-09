@@ -70,13 +70,13 @@ li {
 
 /* --------------------- Media Queries --------------------- */
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   .menu-horizontal {
     display: none;
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 900px) {
   .menu-button {
     display: none;
   }
