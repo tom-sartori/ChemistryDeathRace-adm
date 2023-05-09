@@ -12,7 +12,7 @@
         <li><a (click)="logout()" style="cursor: pointer">Déconnexion</a></li>
       </ul>
 
-      <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menu"  class="menu-button">
+      <button *ngIf="isUserLoggedIn" mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menu" class="menu-button">
         <mat-icon>menu</mat-icon>
       </button>
 
