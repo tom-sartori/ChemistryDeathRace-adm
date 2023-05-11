@@ -28,7 +28,12 @@ export class AuthInterceptor implements HttpInterceptor {
         });
       }
     } else {
-      console.log("No token found");
+      if (this.router.url !== "/signin") {
+        this.router.navigateByUrl("/signin");
+      }
+      else {
+        console.log("No token found");
+      }
     }
     return next.handle(req);
   }
