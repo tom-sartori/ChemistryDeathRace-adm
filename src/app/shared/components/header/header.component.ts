@@ -22,6 +22,9 @@ export class HeaderComponent implements OnInit {
     document.addEventListener('logged-in', () => {
       this.isUserLoggedIn = true;
     });
+    document.addEventListener('logged-out', () => {
+      this.isUserLoggedIn = false;
+    });
   }
 
   logout() {

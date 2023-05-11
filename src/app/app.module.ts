@@ -10,6 +10,7 @@ import { HeaderComponent } from "./shared/components/header/header.component";
 import { RouterModule } from "@angular/router";
 import { AuthInterceptor } from "./shared/interceptors/auth.interceptor";
 import { PagesModule } from "./pages/pages.module";
+import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,8 @@ import { PagesModule } from "./pages/pages.module";
     AppRoutingModule
   ],
   providers: [
+    JwtHelperService,
+    {provide: JWT_OPTIONS, useValue: JWT_OPTIONS},
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
