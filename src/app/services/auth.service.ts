@@ -22,11 +22,17 @@ export class AuthService {
   }
 
   public signIn(email: string, password: string): Observable<any> {
-    return this.http.post(environment.authServiceUrl + '/user/login', {email: email, password: this.hash(password)});
+    return this.http.post(environment.authServiceUrl + '/user/login', {
+      email: this.hash(email),
+      password: this.hash(password)
+    });
   }
 
   public signUp(email: string, password: string): Observable<any> {
-    return this.http.post(environment.authServiceUrl + '/user/register', {email: email, password: this.hash(password)});
+    return this.http.post(environment.authServiceUrl + '/user/register', {
+      email: this.hash(email),
+      password: this.hash(password)
+    });
   }
 
   public get isUserLoggedIn(): Observable<boolean> {
