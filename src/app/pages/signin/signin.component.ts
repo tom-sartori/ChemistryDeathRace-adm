@@ -37,7 +37,6 @@ export class SigninComponent implements OnInit {
     this.authService.get().subscribe((responseEnable) => {
       if (responseEnable.enable) {
         this.authService.signIn(this.emailCtrl.value, this.passwordCtrl.value).subscribe((response) => {
-          console.log(response);
           if (response.token) {
             localStorage.setItem('token', JSON.stringify(response));
             this.authService.setIsUserLoggedIn(true);
