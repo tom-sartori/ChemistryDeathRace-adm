@@ -6,9 +6,9 @@
   <mat-card class="form-card">
     <mat-card-subtitle>Question</mat-card-subtitle>
     <div class="form-row">
-      <mat-form-field appearance="fill">
-        <mat-label>Question</mat-label>
-        <input type="text" matInput formControlName="name">
+      <mat-form-field appearance="fill" (click)="nameMathField?.focus()">
+        <mat-label>Nom de la question</mat-label>
+        <input style="height: 0" type="text" matInput formControlName="name" [value]="nameMathField?.value ?? ''" #nameField>
         <mat-error>Ce champ est requis</mat-error>
       </mat-form-field>
     </div>
@@ -59,11 +59,13 @@
                 matTooltip="Supprimer la réponse" matTooltipPosition="left">
           <mat-icon>delete</mat-icon>
         </button>
+
         <mat-form-field appearance="fill">
           <mat-label>Réponse {{ i + 1 }}</mat-label>
           <input type="text" matInput formControlName="name" required>
           <mat-error>Ce champ est requis</mat-error>
         </mat-form-field>
+
         <mat-radio-group (change)="updateCorrectAnswer(i)" formControlName="answer">
           <mat-radio-button style="margin-left: 10px; margin-bottom: 15px" [value]="true"
                             [checked]="answer.get('answer')?.value">Bonne réponse
@@ -91,6 +93,8 @@
             matTooltipPosition="left">
       <mat-icon class="btn_icon">save</mat-icon>
     </button>
+<!--    TODOD : Delete me. -->
+    <button (click)="onSubmitForm()">test</button>
   </mat-card-actions>
   <button mat-flat-button color="primary" (click)="onGoBack()" [disabled]="loading$ | async" matTooltip="Retour"
           matTooltipPosition="right">

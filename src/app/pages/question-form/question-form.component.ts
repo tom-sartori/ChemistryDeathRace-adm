@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Observable, of, switchMap, tap } from "rxjs";
 import { Question } from "../../models/question.model";
 import { QuestionsService } from "../../services/questions.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Notify } from "notiflix/build/notiflix-notify-aio";
+import { LatexToUtf8Service } from '../../services/latex-to-utf8.service';
+import { MathfieldElement } from 'mathlive';
 
 @Component({
   selector: 'app-question-form',
   templateUrl: './question-form.component.html',
   styleUrls: ['./question-form.component.scss']
 })
-export class QuestionFormComponent implements OnInit {
+export class QuestionFormComponent implements OnInit, AfterViewInit {
 
   loading$!: Observable<boolean>
 
@@ -27,10 +29,18 @@ export class QuestionFormComponent implements OnInit {
   currentQuestionId!: string;
   currentDifficulty: string = '';
 
-  constructor(private formBuilder: FormBuilder,
-              private questionsService: QuestionsService,
-              private router: Router,
-              private route: ActivatedRoute) { }
+  @ViewChild('nameField')
+  private nameField!: ElementRef;
+  public nameMathField: MathfieldElement | undefined;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private questionsService: QuestionsService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private latexToUtf8Service: LatexToUtf8Service
+  ) {
+  }
 
   ngOnInit(): void {
     this.initMainForm();
@@ -44,8 +54,15 @@ export class QuestionFormComponent implements OnInit {
     ).subscribe();
   }
 
+  ngAfterViewInit() {
+    MathfieldElement.fontsDirectory = null;
+    MathfieldElement.soundsDirectory = null;
+
+    this.nameMathField = this.addMathField(this.nameField, this.mainForm.controls['name']);
+  }
+
   private initDifficulties() {
-    this.questionsService.getDifficultiesObservable().subscribe( x => {
+    this.questionsService.getDifficultiesObservable().subscribe(x => {
       this.localDifficulties = x;
       this.questionsService.setLoadingStatus(false);
     });
@@ -56,21 +73,28 @@ export class QuestionFormComponent implements OnInit {
     this.difficultyCtrl = this.formBuilder.control('');
     if (this.router.url === "/questions/add") {
       this.initAddForm();
-    } else {
+    }
+    else {
       this.initUpdateForm();
     }
   }
 
-  onSubmitForm() {
-    if (this.router.url === "/questions/add") {
-      this.saveQuestion();
-    } else {
-      this.updateQuestion();
+  onSubmitForm(): void {
+    if (this.mainForm.invalid) {
+      Notify.failure("Veuillez remplir tous les champs obligatoires. ")
     }
-    this.onGoBack();
+    else {
+      if (this.router.url === "/questions/add") {
+        this.saveQuestion();
+      }
+      else {
+        this.updateQuestion();
+      }
+      this.onGoBack();
+    }
   }
 
-  private resetForm(){
+  private resetForm() {
     this.mainForm.reset();
     this.propositions.clear();
     this.questionsService.getDifficultiesFromServer();
@@ -131,7 +155,8 @@ export class QuestionFormComponent implements OnInit {
         if (saved) {
           this.resetForm();
           Notify.success("La question a bien été ajoutée")
-        } else {
+        }
+        else {
           Notify.failure("Une erreur est survenue lors de l'enregistrement de la question")
         }
       })
@@ -148,7 +173,8 @@ export class QuestionFormComponent implements OnInit {
         if (saved) {
           this.resetForm();
           Notify.success("La question a bien été modifiée")
-        } else {
+        }
+        else {
           Notify.failure("Une erreur est survenue lors de l'enregistrement de la question")
         }
       })
@@ -174,7 +200,8 @@ export class QuestionFormComponent implements OnInit {
         // If proposition is answer, set first proposition as answer.
         this.propositions.removeAt(index);
         this.propositions.controls[0].patchValue({answer: true});
-      } else {
+      }
+      else {
         this.propositions.removeAt(index);
       }
     }
@@ -199,10 +226,28 @@ export class QuestionFormComponent implements OnInit {
 
   updateDifficulty(newDifficulty: string) {
     this.currentDifficulty = newDifficulty;
-    this.questionsService.getCategoriesObservable(newDifficulty).subscribe( x => {
+    this.questionsService.getCategoriesObservable(newDifficulty).subscribe(x => {
       this.localCategories = x;
       this.questionsService.setLoadingStatus(false);
     });
   }
 
+  private addMathField(sibling: ElementRef, formControl: AbstractControl<any>): MathfieldElement {
+    let mfe: MathfieldElement = new MathfieldElement();
+    mfe.style.width = '100%';
+    mfe.style.backgroundColor = 'inherit';
+    mfe.style.border = 'none';
+    mfe.style.outline = 'none';
+    mfe.mathModeSpace = '\\:'
+
+    mfe.onclick = (): void => {
+      sibling.nativeElement.focus();
+      mfe.focus();
+    }
+
+    mfe.oninput = () => formControl.patchValue(this.latexToUtf8Service.convert(mfe?.value ?? formControl.value))
+    sibling.nativeElement.insertAdjacentElement('afterend', mfe);
+
+    return mfe;
+  }
 }
