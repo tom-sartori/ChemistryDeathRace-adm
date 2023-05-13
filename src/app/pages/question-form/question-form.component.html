@@ -60,9 +60,9 @@
           <mat-icon>delete</mat-icon>
         </button>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" (click)="answerMathFields[i]?.focus()">
           <mat-label>Réponse {{ i + 1 }}</mat-label>
-          <input type="text" matInput formControlName="name" required>
+          <input style="height: 0" type="text" matInput formControlName="name" required [value]="answerMathFields[i]?.value ?? ''" [id]="'answer' + i + 'Field'">
           <mat-error>Ce champ est requis</mat-error>
         </mat-form-field>
 
@@ -93,8 +93,6 @@
             matTooltipPosition="left">
       <mat-icon class="btn_icon">save</mat-icon>
     </button>
-<!--    TODOD : Delete me. -->
-    <button (click)="onSubmitForm()">test</button>
   </mat-card-actions>
   <button mat-flat-button color="primary" (click)="onGoBack()" [disabled]="loading$ | async" matTooltip="Retour"
           matTooltipPosition="right">

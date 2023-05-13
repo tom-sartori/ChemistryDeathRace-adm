@@ -33,6 +33,9 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
   private nameField!: ElementRef;
   public nameMathField: MathfieldElement | undefined;
 
+  private answerFields: HTMLElement[] = [];
+  public answerMathFields: (MathfieldElement | undefined)[] = [];
+
   constructor(
     private formBuilder: FormBuilder,
     private questionsService: QuestionsService,
@@ -58,7 +61,10 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     MathfieldElement.fontsDirectory = null;
     MathfieldElement.soundsDirectory = null;
 
-    this.nameMathField = this.addMathField(this.nameField, this.mainForm.controls['name']);
+    requestAnimationFrame(() => this.nameMathField = this.addMathField(this.nameField.nativeElement, this.mainForm.controls['name']));
+    for (let i: number = 0; i < this.propositions.length; i++) {
+      requestAnimationFrame(() => this.setPropositionMathField(i));
+    }
   }
 
   private initDifficulties() {
@@ -192,10 +198,12 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       name: ['', Validators.required],
       answer: [false, Validators.required],
     }));
+    requestAnimationFrame(() => this.setPropositionMathField(this.propositions.length - 1));
   }
 
   removeAnswer(index: number): void {
     if (0 <= index && index < this.propositions.length) {
+      this.unsetPropositionMathField(index);
       if (this.propositions.controls[index].get('answer')?.value) {
         // If proposition is answer, set first proposition as answer.
         this.propositions.removeAt(index);
@@ -232,22 +240,33 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private addMathField(sibling: ElementRef, formControl: AbstractControl<any>): MathfieldElement {
+  private addMathField(sibling: HTMLElement, formControl: AbstractControl<any>): MathfieldElement {
     let mfe: MathfieldElement = new MathfieldElement();
+    mfe.setValue(formControl.value);
     mfe.style.width = '100%';
     mfe.style.backgroundColor = 'inherit';
     mfe.style.border = 'none';
     mfe.style.outline = 'none';
-    mfe.mathModeSpace = '\\:'
+    mfe.mathModeSpace = '\\:';
 
     mfe.onclick = (): void => {
-      sibling.nativeElement.focus();
+      sibling.focus();
       mfe.focus();
     }
 
     mfe.oninput = () => formControl.patchValue(this.latexToUtf8Service.convert(mfe?.value ?? formControl.value))
-    sibling.nativeElement.insertAdjacentElement('afterend', mfe);
+    sibling.insertAdjacentElement('afterend', mfe);
 
     return mfe;
+  }
+
+  private setPropositionMathField(index: number) {
+    this.answerFields.push(document.getElementById('answer' + index + 'Field')!);
+    this.answerMathFields.push(this.addMathField(this.answerFields[index], this.propositions.controls[index].get('name')!));
+  }
+
+  private unsetPropositionMathField(index: number) {
+    this.answerFields.splice(index, 1);
+    this.answerMathFields.splice(index, 1);
   }
 }
