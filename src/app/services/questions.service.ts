@@ -96,13 +96,7 @@ export class QuestionsService {
   }
 
   getQuestionById(id: string): Observable<Question> {
-    if (!this._questions$.value.length) {
-      return this.http.get<Question>(`${environment.apiUrl}/question/id/${id}`);
-    } else {
-      return this.questions$.pipe(
-        map(games => games.filter(game => game.id === id)[0])
-      );
-    }
+    return this.http.get<Question>(`${environment.apiUrl}/question/id/${id}`);
   }
 
   deleteQuestion(id: string) {

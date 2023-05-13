@@ -126,13 +126,8 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
   }
 
   private initUpdateForm() {
-    this.question$ = this.route.params.pipe(
-      tap(params => {
-          this.currentQuestionId = params['id'];
-        }
-      ),
-      switchMap(params => this.questionsService.getQuestionById(params['id']))
-    );
+    this.currentQuestionId = this.route.snapshot.paramMap.get('id')!;
+    this.question$ = this.questionsService.getQuestionById(this.currentQuestionId);
     this.question$.pipe(
       tap((question: Question) => {
         this.propositions = this.formBuilder.array(question.propositions.map(proposition => {
