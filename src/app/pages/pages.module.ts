@@ -13,12 +13,16 @@ import { QuestionsService } from "../services/questions.service";
 import { AuthService } from "../services/auth.service";
 import { RouterModule, Routes } from "@angular/router";
 import { CategoriesListComponent } from './categories-list/categories-list.component';
+import { StatsComponent } from './stats/stats.component';
+import { StatsService } from '../services/stats.service';
+import { StatTileComponent } from './stats/components/stat-tile/stat-tile.component';
 
 const routes: Routes = [
   {path: 'questions', component: QuestionsListComponent},
   {path: 'questions/add', component: QuestionFormComponent},
   {path: 'questions/update/:id', component: QuestionFormComponent},
   {path: 'categories', component: CategoriesListComponent},
+  {path: 'stats', component: StatsComponent},
   {path: 'error404', component: ErrorComponent},
   {path: 'signin', component: SigninComponent},
   {path: 'abcd/efgh/register', component: SignupComponent},
@@ -35,7 +39,9 @@ const routes: Routes = [
     SigninComponent,
     QuestionsListToolbarComponent,
     SignupComponent,
-    CategoriesListComponent
+    CategoriesListComponent,
+    StatsComponent,
+    StatTileComponent
   ],
   imports: [
     SharedModule,
@@ -44,7 +50,8 @@ const routes: Routes = [
   ],
   providers: [
     QuestionsService,
-    AuthService
+    AuthService,
+    StatsService
   ]
 })
 export class PagesModule {

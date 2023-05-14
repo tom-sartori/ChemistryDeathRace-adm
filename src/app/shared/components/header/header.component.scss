@@ -83,17 +83,19 @@ h1 {
 
 /* --------------------- Media Queries --------------------- */
 
-@media (max-width: 900px) {
-  .menu-horizontal {
-    display: none;
-  }
-
+@media (max-width: 700px) {
   .left-section {
     display: none;
   }
 }
 
-@media (min-width: 900px) {
+@media (max-width: 1350px) {
+  .menu-horizontal {
+    display: none;
+  }
+}
+
+@media (min-width: 1350px) {
   .menu-button {
     display: none;
   }

@@ -1,0 +1,31 @@
+@import "src/assets/styles/colors.scss";
+
+
+h1 {
+  color: $blue-enscm;
+}
+
+mat-grid-tile {
+  background: $turquoise-enscm;
+  border-radius: 20px;
+}
+
+table {
+  width: 100%;
+}
+
+.questions-stats {
+  margin-top: 30px;
+}
+
+.mat-row {
+  height: auto;
+}
+
+.mat-cell, .mat-header-cell {
+  padding: 10px;
+}
+
+.mat-cell {
+  color: $blue-enscm;
+}
