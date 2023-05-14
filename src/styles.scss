@@ -1,20 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
 @import "src/assets/styles/colors.scss";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: $color-accent;}
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: $background-color;
+}
 
 a {
-  color: white;
+  color: $background-color;;
   text-decoration: none;
   font-weight: normal;
+
   &:hover {
-    border-bottom: white thin solid;
+    border-bottom: $background-color thin solid;
   }
 }
 
 h1 {
-  color: white;
+  color: $blue-enscm;
 }
 
 .spinner {

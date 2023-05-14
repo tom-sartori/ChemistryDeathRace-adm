@@ -42,7 +42,5 @@
       </ng-container>
     </mat-list-item>
   </mat-list>
-  <div *ngIf="loading" class="spinner">
-    <img src="../../../assets/images/logo.png" alt="spinner" class="spinner-image">
-  </div>
 </mat-card>
+<app-spinner *ngIf="loading"></app-spinner>

@@ -9,6 +9,10 @@ li {
   margin-left: 20px;
 }
 
+.mat-toolbar {
+  background-color: $blue-enscm;
+}
+
 .toolbar-row {
   display: flex;
   position: relative;
@@ -48,8 +52,8 @@ li {
 }
 
 .active {
-  color: $color-accent;
-  border-bottom: $color-accent thin solid;
+  color: $turquoise-enscm;
+  border-bottom: $turquoise-enscm thin solid;
 }
 
 .home-link {
@@ -57,6 +61,7 @@ li {
   display: flex;
   margin: 0;
   align-items: center;
+  padding: 10px;
 }
 
 .home-link:hover {
@@ -68,10 +73,22 @@ li {
   height: 80%;
 }
 
+.menu-button {
+  color: $background-color;
+}
+
+h1 {
+  color: $background-color;
+}
+
 /* --------------------- Media Queries --------------------- */
 
 @media (max-width: 900px) {
   .menu-horizontal {
+    display: none;
+  }
+
+  .left-section {
     display: none;
   }
 }

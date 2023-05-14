@@ -1,9 +1,16 @@
+@import "src/assets/styles/colors.scss";
+
 mat-form-field {
   width: 100%;
+
   &.full-width {
     width: 80%;
     margin-left: 10%;
   }
+}
+
+.mat-card-title {
+  color: $blue-enscm;
 }
 
 .form-row {
@@ -38,4 +45,9 @@ mat-card-actions {
 
 button {
   margin-right: 16px;
+}
+
+.action-buttons {
+  background-color: $blue-enscm;
+  color: $background-color;
 }

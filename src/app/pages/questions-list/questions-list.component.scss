@@ -1,9 +1,5 @@
 @import "../../../assets/styles/colors";
 
-.question {
-  color: $color-accent;
-}
-
 div {
   border-bottom: $color-accent thin solid;
 }
@@ -13,7 +9,7 @@ div {
 }
 
 .question {
-  color: $color-accent;
+  color: $blue-enscm;
   font-size: large;
   margin-top: auto;
   margin-bottom: auto;
@@ -62,6 +58,7 @@ a {
 
 .newButton {
   margin-bottom: 20px;
+  background-color: $blue-enscm;
 }
 
 .btn_icon {
