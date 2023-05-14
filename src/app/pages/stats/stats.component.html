@@ -15,7 +15,7 @@
   </mat-grid-tile>
   <mat-grid-tile *ngIf="mostPlayedDifficulty">
     <app-stat-tile
-      [header]="'Difficulté jouée'"
+      [header]="'Difficulté la plus jouée'"
       [value]="mostPlayedDifficulty">
     </app-stat-tile>
   </mat-grid-tile>
@@ -41,9 +41,9 @@
   </mat-grid-tile>
   <mat-grid-tile colspan="2">
     <app-stat-tile
-      [header]="'Nombre de joueurs moyen'"
+      [header]="'Nombre moyen de joueurs par partie'"
       [value]="(numberOfPlayers | number: '1.0-2')!"
-      [footer]="'par partie'">
+      [footer]="(numberOfPlayers == 1 ? 'joueur' : 'joueurs') + ' par partie'">
     </app-stat-tile>
   </mat-grid-tile>
 </mat-grid-list>

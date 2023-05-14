@@ -10,14 +10,27 @@
 }
 
 h1 {
-  font-size: 6vh;
   font-weight: bold;
-  margin-top: 2vh;
-  margin-bottom: 2vh;
-  color: $background-color
+  color: $background-color;
+  margin: 0;
 }
 
 p {
   color: $blue-enscm;
   font-weight: bold;
+  margin: 0;
+  text-align: center;
+}
+
+@media (min-width: 800px) {
+  h1 {
+    font-size: xxx-large;
+    padding: 40px;
+  }
+}
+
+@media (max-width: 800px) {
+  p {
+    font-size: x-small;
+  }
 }
