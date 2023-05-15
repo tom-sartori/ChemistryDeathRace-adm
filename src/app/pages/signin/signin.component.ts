@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from "../../services/auth.service";
-import { FormControl, Validators } from "@angular/forms";
+import { AuthService } from '@services/auth.service';
+import { FormControl, Validators } from '@angular/forms';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { Router } from '@angular/router';
 
@@ -41,25 +41,25 @@ export class SigninComponent implements OnInit {
             localStorage.setItem('token', JSON.stringify(response));
             this.authService.setIsUserLoggedIn(true);
             document.dispatchEvent(new Event('logged-in'));
-            this.router.navigateByUrl("/questions").catch((error) => {
-              Notify.failure("Erreur de redirection : " + error.message);
+            this.router.navigateByUrl('/questions').catch((error) => {
+              Notify.failure('Erreur de redirection : ' + error.message);
             });
           }
           else {
-            Notify.failure("Erreur d'authentification");
+            Notify.failure('Erreur d\'authentification');
           }
           this.loading = false;
         });
       }
       else {
         this.loading = false;
-        Notify.failure("Erreur serveur");
+        Notify.failure('Erreur serveur');
       }
     })
   }
 
   public onEnter(event: KeyboardEvent): void {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       this.signIn();
     }
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { QuestionsService } from '../../services/questions.service';
+import { QuestionsService } from '@services/questions.service';
 
 @Component({
   selector: 'app-categories-list',

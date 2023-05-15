@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { Observable, of, switchMap, tap } from "rxjs";
-import { Question } from "../../models/question.model";
-import { QuestionsService } from "../../services/questions.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Notify } from "notiflix/build/notiflix-notify-aio";
-import { LatexToUtf8Service } from '../../services/latex-to-utf8.service';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable, of, switchMap, tap } from 'rxjs';
+import { Question } from '@models/question.model';
+import { QuestionsService } from '@services/questions.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { LatexToUtf8Service } from '@services/latex-to-utf8.service';
 import { MathfieldElement } from 'mathlive';
 
 @Component({
@@ -61,7 +61,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     MathfieldElement.fontsDirectory = null;
     MathfieldElement.soundsDirectory = null;
 
-    if (this.router.url.includes("add")) {
+    if (this.router.url.includes('add')) {
       this.nameMathField = this.addMathField(this.nameField.nativeElement, this.mainForm.controls['name']);
       this.setPropositionMathField(0);
     }
@@ -84,7 +84,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       difficulty: ['', Validators.required],
       propositions: this.propositions
     });
-    if (this.router.url.includes("update")) {
+    if (this.router.url.includes('update')) {
       this.initUpdateForm();
     }
     else {
@@ -94,10 +94,10 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
 
   onSubmitForm(): void {
     if (this.mainForm.invalid) {
-      Notify.failure("Veuillez remplir tous les champs obligatoires. ")
+      Notify.failure('Veuillez remplir tous les champs obligatoires. ')
     }
     else {
-      if (this.router.url === "/questions/add") {
+      if (this.router.url === '/questions/add') {
         this.saveQuestion();
       }
       else {
@@ -154,10 +154,10 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       tap(saved => {
         if (saved) {
           this.resetForm();
-          Notify.success("La question a bien été ajoutée")
+          Notify.success('La question a bien été ajoutée')
         }
         else {
-          Notify.failure("Une erreur est survenue lors de l'enregistrement de la question")
+          Notify.failure('Une erreur est survenue lors de l\'enregistrement de la question')
         }
       })
     ).subscribe();
@@ -172,10 +172,10 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       tap(saved => {
         if (saved) {
           this.resetForm();
-          Notify.success("La question a bien été modifiée")
+          Notify.success('La question a bien été modifiée')
         }
         else {
-          Notify.failure("Une erreur est survenue lors de l'enregistrement de la question")
+          Notify.failure('Une erreur est survenue lors de l\'enregistrement de la question')
         }
       })
     ).subscribe();

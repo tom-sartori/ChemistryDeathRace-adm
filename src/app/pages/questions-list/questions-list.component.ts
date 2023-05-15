@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { map, Observable } from "rxjs";
-import { FormBuilder } from "@angular/forms";
-import { Router } from "@angular/router";
-import { Question } from "../../models/question.model";
-import { QuestionsService } from "../../services/questions.service";
-import { Notify } from "notiflix/build/notiflix-notify-aio";
-import { QuestionsListToolbar } from "./questions-list-toolbar/questions-list-toolbar";
+import { map, Observable } from 'rxjs';
+import { FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Question } from '@models/question.model';
+import { QuestionsService } from '@services/questions.service';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { QuestionsListToolbar } from './questions-list-toolbar/questions-list-toolbar';
 
 @Component({
   selector: 'app-questions-list',
@@ -33,15 +33,15 @@ export class QuestionsListComponent implements OnInit {
   }
 
   onNewQuestion() {
-    this.router.navigateByUrl("/questions/add")
+    this.router.navigateByUrl('/questions/add')
   }
 
   onEditQuestion(id: string) {
-    this.router.navigateByUrl("/questions/update/" + id)
+    this.router.navigateByUrl('/questions/update/' + id)
   }
 
   onDeleteQuestion(id: string) {
-    if (confirm("Voulez vous vraiment supprimer cette question ?")) {
+    if (confirm('Voulez vous vraiment supprimer cette question ?')) {
       this.questions$.subscribe(
         (questions: Question[]) => {
           let question = questions.find(question => question.id === id);

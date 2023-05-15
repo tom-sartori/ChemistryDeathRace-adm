@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from "../../services/auth.service";
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
+import { AuthService } from '@services/auth.service';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
@@ -66,18 +66,18 @@ export class SignupComponent implements OnInit {
     this.loading = true;
     this.authService.signUp(this.emailCtrl.value, this.passwordCtrl.value).subscribe((response) => {
       if (response) {
-        Notify.success("Votre compte a bien été créé !");
-        this.router.navigateByUrl("/signin");
+        Notify.success('Votre compte a bien été créé !');
+        this.router.navigateByUrl('/signin');
       }
       else {
-        Notify.failure("Une erreur est survenue lors de la création de votre compte !");
+        Notify.failure('Une erreur est survenue lors de la création de votre compte !');
       }
       this.loading = false;
     })
   }
 
   public onEnter(event: KeyboardEvent): void {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       this.signUp();
     }
   }

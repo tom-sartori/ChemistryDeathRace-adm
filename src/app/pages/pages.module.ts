@@ -1,21 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableExporterModule } from 'mat-table-exporter';
-import { QuestionsListComponent } from "./questions-list/questions-list.component";
-import { QuestionFormComponent } from "./question-form/question-form.component";
-import { ErrorComponent } from "./error/error.component";
-import { SigninComponent } from "./signin/signin.component";
+import { QuestionsListComponent } from './questions-list/questions-list.component';
+import { QuestionFormComponent } from './question-form/question-form.component';
+import { ErrorComponent } from './error/error.component';
+import { SigninComponent } from './signin/signin.component';
 import {
   QuestionsListToolbarComponent
-} from "./questions-list/questions-list-toolbar/questions-list-toolbar.component";
-import { SignupComponent } from "./signup/signup.component";
-import { SharedModule } from "../shared/shared.module";
-import { QuestionsService } from "../services/questions.service";
-import { AuthService } from "../services/auth.service";
-import { RouterModule, Routes } from "@angular/router";
+} from './questions-list/questions-list-toolbar/questions-list-toolbar.component';
+import { SignupComponent } from './signup/signup.component';
+import { SharedModule } from '@shared/shared.module';
+import { QuestionsService } from '@services/questions.service';
+import { AuthService } from '@services/auth.service';
+import { RouterModule, Routes } from '@angular/router';
 import { CategoriesListComponent } from './categories-list/categories-list.component';
 import { StatsComponent } from './stats/stats.component';
-import { StatsService } from '../services/stats.service';
+import { StatsService } from '@services/stats.service';
 import { StatTileComponent } from './stats/stat-tile/stat-tile.component';
 
 const routes: Routes = [

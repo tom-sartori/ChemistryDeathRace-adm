@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, catchError, map, mapTo, Observable, of, switchMap, take, tap } from "rxjs";
-import { Question } from "../models/question.model";
-import { environment } from "../../environments/environment";
-
-// import {environment} from "../../environments/environment.prod";
+import { BehaviorSubject, catchError, map, mapTo, Observable, of, switchMap, take, tap } from 'rxjs';
+import { Question } from '@models/question.model';
+import { environment } from '@environments/environment';
 
 @Injectable()
 export class QuestionsService {

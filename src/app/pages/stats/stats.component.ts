@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { StatsService } from '../../services/stats.service';
+import { StatsService } from '@services/stats.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { Stat } from '../../models/stat.model';
+import { Stat } from '@models/stat.model';
 
 @Component({
   selector: 'app-stats',

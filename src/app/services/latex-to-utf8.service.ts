@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 declare var latex2utf8: any;
 
 @Injectable({
