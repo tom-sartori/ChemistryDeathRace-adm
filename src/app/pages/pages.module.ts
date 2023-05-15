@@ -16,7 +16,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { CategoriesListComponent } from './categories-list/categories-list.component';
 import { StatsComponent } from './stats/stats.component';
 import { StatsService } from '../services/stats.service';
-import { StatTileComponent } from './stats/components/stat-tile/stat-tile.component';
+import { StatTileComponent } from './stats/stat-tile/stat-tile.component';
 
 const routes: Routes = [
   {path: 'questions', component: QuestionsListComponent},

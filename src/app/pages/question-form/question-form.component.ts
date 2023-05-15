@@ -7,7 +7,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Notify } from "notiflix/build/notiflix-notify-aio";
 import { LatexToUtf8Service } from '../../services/latex-to-utf8.service';
 import { MathfieldElement } from 'mathlive';
-import { logMessages } from '@angular-devkit/build-angular/src/builders/browser-esbuild/esbuild';
 
 @Component({
   selector: 'app-question-form',
@@ -78,11 +77,18 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
   private initMainForm(): void {
     this.categoryCtrl = this.formBuilder.control('');
     this.difficultyCtrl = this.formBuilder.control('');
-    if (this.router.url === "/questions/add") {
-      this.initAddForm();
+    this.propositions = this.formBuilder.array([]);
+    this.mainForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      category: ['', Validators.required],
+      difficulty: ['', Validators.required],
+      propositions: this.propositions
+    });
+    if (this.router.url.includes("update")) {
+      this.initUpdateForm();
     }
     else {
-      this.initUpdateForm();
+      this.addProposition();
     }
   }
 
@@ -111,41 +117,28 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     this.questionsService.getDifficultiesFromServer();
   }
 
-  private initAddForm() {
-    this.propositions = this.formBuilder.array([
-      this.formBuilder.group({
-        name: ['', Validators.required],
-        answer: [true, Validators.required],
-      }
-    )]);
-    this.mainForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      category: ['', Validators.required],
-      difficulty: ['', Validators.required],
-      propositions: this.propositions
-    });
+  private addProposition(name: string = '', answer: boolean = true) {
+    this.propositions.push(this.formBuilder.group({
+      name: [name, Validators.required],
+      answer: [answer, Validators.required],
+    }));
   }
 
   private initUpdateForm() {
     this.currentQuestionId = this.route.snapshot.paramMap.get('id')!;
     this.question$ = this.questionsService.getQuestionById(this.currentQuestionId);
-    this.question$.pipe(
-      tap((question: Question) => {
-        this.propositions = this.formBuilder.array(question.propositions.map(proposition => {
-          return this.formBuilder.group({
-            name: [proposition.name, Validators.required],
-            answer: [proposition.answer, Validators.required],
-          })
-        }));
-        this.mainForm = this.formBuilder.group({
-          name: [question.name, Validators.required],
-          category: [question.category, Validators.required],
-          difficulty: [question.difficulty, Validators.required],
-          propositions: this.propositions
-        });
-        this.updateDifficulty(question.difficulty);
-      })
-    ).subscribe();
+    this.question$.subscribe((question: Question) => {
+      this.updateDifficulty(question.difficulty);
+      for (let i = 0; i < question.propositions.length; i++) {
+        this.addProposition(question.propositions[i].name, question.propositions[i].answer);
+      }
+      this.mainForm.patchValue({
+        name: question.name,
+        category: question.category,
+        difficulty: question.difficulty,
+      });
+      this.questionsService.setLoadingStatus(false);
+    });
   }
 
   private saveQuestion() {

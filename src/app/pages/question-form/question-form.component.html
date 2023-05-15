@@ -8,7 +8,7 @@
     <div class="form-row">
       <mat-form-field appearance="fill" (click)="nameMathField?.focus()">
         <mat-label>Nom de la question</mat-label>
-        <input style="height: 0" type="text" matInput formControlName="name" [value]="nameMathField?.value ?? ''" #nameField>
+        <input type="text" matInput formControlName="name" [value]="nameMathField?.value ?? ''" #nameField>
         <mat-error>Ce champ est requis</mat-error>
       </mat-form-field>
     </div>
@@ -63,7 +63,8 @@
 
         <mat-form-field appearance="fill" (click)="answerMathFields[i]?.focus()">
           <mat-label>Réponse {{ i + 1 }}</mat-label>
-          <input style="height: 0" type="text" matInput formControlName="name" required [value]="answerMathFields[i]?.value ?? ''" [id]="'answer' + i + 'Field'">
+          <input type="text" matInput formControlName="name" required [value]="answerMathFields[i]?.value ?? ''"
+                 [id]="'answer' + i + 'Field'">
           <mat-error>Ce champ est requis</mat-error>
         </mat-form-field>
 
@@ -73,7 +74,7 @@
           </mat-radio-button>
         </mat-radio-group>
       </div>
-      <div>
+      <div *ngIf="propositions.value.length > 0">
         <button mat-flat-button class="action-buttons" (click)="addAnswer()" *ngIf="propositions.length < 4"
                 [disabled]="!propositions.at(propositions.length - 1).value.name.length">
           Ajouter une réponse +
