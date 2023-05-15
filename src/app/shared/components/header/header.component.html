@@ -1,14 +1,21 @@
-<mat-toolbar color="primary">
+<mat-toolbar>
   <div class="toolbar-row">
     <div class="left-section">
-      <a routerLink="/questions" class="home-link"><img class="logo" src="../../../../assets/images/logo.png"
+      <a routerLink="/questions" class="home-link"><img class="logo"
+                                                        src="../../../../assets/images/logos/logo_enscm_turquoise.png"
+                                                        alt="logo"></a>
+      <a routerLink="/questions" class="home-link"><img class="logo"
+                                                        src="../../../../assets/images/logos/logo_um_blanc.png"
                                                         alt="logo"></a>
     </div>
     <div class="center-section">
-      <a routerLink="/questions" class="home-link"><h1 class="title">Chemical Pursuit</h1></a>
+      <a routerLink="/questions" class="home-link"><h1 class="title">Chemistry Death Race</h1></a>
     </div>
     <div class="right-section">
       <ul *ngIf="isUserLoggedIn" class="menu-horizontal">
+        <li><a routerLink="/questions" routerLinkActive="active">Questions</a></li>
+        <li><a routerLink="/categories" routerLinkActive="active">Catégories</a></li>
+        <li><a routerLink="/stats" routerLinkActive="active">Statistiques</a></li>
         <li><a (click)="logout()" style="cursor: pointer">Déconnexion</a></li>
       </ul>
 
@@ -17,7 +24,25 @@
       </button>
 
       <mat-menu #menu="matMenu" class="menu-button">
-        <a (click)="logout()" *ngIf="isUserLoggedIn" >
+        <a routerLink="/questions" *ngIf="isUserLoggedIn">
+          <button mat-menu-item>
+            <mat-icon>quiz</mat-icon>
+            <span>Questions</span>
+          </button>
+        </a>
+        <a routerLink="/categories" *ngIf="isUserLoggedIn">
+          <button mat-menu-item>
+            <mat-icon>category</mat-icon>
+            <span>Catégories</span>
+          </button>
+        </a>
+        <a routerLink="/stats" *ngIf="isUserLoggedIn">
+          <button mat-menu-item>
+            <mat-icon>query_stats</mat-icon>
+            <span>Statistiques</span>
+          </button>
+        </a>
+        <a (click)="logout()" *ngIf="isUserLoggedIn">
           <button mat-menu-item>
             <mat-icon>logout</mat-icon>
             <span>Déconnexion</span>

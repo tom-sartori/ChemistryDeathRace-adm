@@ -1,0 +1,36 @@
+@import "src/assets/styles/colors.scss";
+
+.tile-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+h1 {
+  font-weight: bold;
+  color: $background-color;
+  margin: 0;
+}
+
+p {
+  color: $blue-enscm;
+  font-weight: bold;
+  margin: 0;
+  text-align: center;
+}
+
+@media (min-width: 800px) {
+  h1 {
+    font-size: xxx-large;
+    padding: 40px;
+  }
+}
+
+@media (max-width: 800px) {
+  p {
+    font-size: x-small;
+  }
+}
