@@ -23,6 +23,7 @@
     "@auth0/angular-jwt": "^5.1.2",
     "@types/crypto-js": "^4.1.1",
     "crypto-js": "^4.1.1",
+    "mat-table-exporter": "^10.2.4",
     "mathlive": "^0.93.0",
     "notiflix": "^3.2.6",
     "rxjs": "~7.5.0",

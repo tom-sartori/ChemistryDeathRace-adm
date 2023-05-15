@@ -3,6 +3,7 @@
 
 h1 {
   color: $blue-enscm;
+  margin: 0;
 }
 
 mat-grid-tile {
@@ -10,20 +11,39 @@ mat-grid-tile {
   border-radius: 20px;
 }
 
-table {
+mat-table {
   width: 100%;
 }
 
 .questions-stats {
   margin-top: 30px;
+  display: flex;
+  flex-direction: column;
 }
 
-.mat-row {
-  height: auto;
+.questions-stats > .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  color: $blue-enscm;
 }
 
 .mat-cell, .mat-header-cell {
   padding: 10px;
+  width: 50%;
+}
+
+.mat-column-name {
+  width: 50%;
+}
+
+.mat-column-difficulty {
+  width: 25%;
+}
+
+.mat-column-percentage {
+  width: 25%;
 }
 
 .mat-cell {

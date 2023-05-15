@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatTableExporterModule } from 'mat-table-exporter';
 import { QuestionsListComponent } from "./questions-list/questions-list.component";
 import { QuestionFormComponent } from "./question-form/question-form.component";
 import { ErrorComponent } from "./error/error.component";
@@ -46,7 +47,8 @@ const routes: Routes = [
   imports: [
     SharedModule,
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    MatTableExporterModule
   ],
   providers: [
     QuestionsService,
