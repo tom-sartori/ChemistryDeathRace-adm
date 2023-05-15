@@ -1,0 +1,46 @@
+<h1>Liste des catégories</h1>
+<mat-card>
+  <mat-button-toggle-group #difficultyGroup="matButtonToggleGroup" (change)="onDifficultyChange(difficultyGroup.value)">
+    <mat-button-toggle *ngFor="let difficulty of difficulties" [value]="difficulty"
+                       [checked]="selectedDifficulty == difficulty">
+      {{ difficulty }}
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+  <div class="difficulty">
+    <ng-container *ngIf="!isEditingDifficulty">
+      <h2>{{ selectedDifficulty }}</h2>
+      <button mat-icon-button color="primary" (click)="startEditingDifficulty()">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </ng-container>
+    <ng-container *ngIf="isEditingDifficulty">
+      <mat-form-field appearance="fill">
+        <input matInput [(ngModel)]="editedDifficulty" required>
+      </mat-form-field>
+      <button mat-icon-button color="primary" (click)="saveDifficulty()">
+        <mat-icon>save</mat-icon>
+      </button>
+    </ng-container>
+  </div>
+  <p class="alert-categories" *ngIf="categories && categories.length < 6">⚠️ Cette difficulté n'a pas assez de
+    catégories pour être jouée ⚠️</p>
+  <mat-list *ngIf="categories">
+    <mat-list-item *ngFor="let category of categories; let i = index">
+      <ng-container *ngIf="!isEditing[i]" class="normal-category">
+        <h4>{{ category }}</h4>
+        <button mat-icon-button color="primary" (click)="startEditing(i)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </ng-container>
+      <ng-container *ngIf="isEditing[i]" class="category-input">
+        <mat-form-field appearance="fill">
+          <input matInput [(ngModel)]="editedCategory" required>
+        </mat-form-field>
+        <button mat-icon-button color="primary" (click)="saveCategory(i)">
+          <mat-icon>save</mat-icon>
+        </button>
+      </ng-container>
+    </mat-list-item>
+  </mat-list>
+</mat-card>
+<app-spinner *ngIf="loading"></app-spinner>

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatTableExporterModule } from 'mat-table-exporter';
 import { QuestionsListComponent } from "./questions-list/questions-list.component";
 import { QuestionFormComponent } from "./question-form/question-form.component";
 import { ErrorComponent } from "./error/error.component";
@@ -12,11 +13,17 @@ import { SharedModule } from "../shared/shared.module";
 import { QuestionsService } from "../services/questions.service";
 import { AuthService } from "../services/auth.service";
 import { RouterModule, Routes } from "@angular/router";
+import { CategoriesListComponent } from './categories-list/categories-list.component';
+import { StatsComponent } from './stats/stats.component';
+import { StatsService } from '../services/stats.service';
+import { StatTileComponent } from './stats/stat-tile/stat-tile.component';
 
 const routes: Routes = [
   {path: 'questions', component: QuestionsListComponent},
   {path: 'questions/add', component: QuestionFormComponent},
   {path: 'questions/update/:id', component: QuestionFormComponent},
+  {path: 'categories', component: CategoriesListComponent},
+  {path: 'stats', component: StatsComponent},
   {path: 'error404', component: ErrorComponent},
   {path: 'signin', component: SigninComponent},
   {path: 'abcd/efgh/register', component: SignupComponent},
@@ -32,16 +39,21 @@ const routes: Routes = [
     ErrorComponent,
     SigninComponent,
     QuestionsListToolbarComponent,
-    SignupComponent
+    SignupComponent,
+    CategoriesListComponent,
+    StatsComponent,
+    StatTileComponent
   ],
   imports: [
     SharedModule,
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    MatTableExporterModule
   ],
   providers: [
     QuestionsService,
-    AuthService
+    AuthService,
+    StatsService
   ]
 })
 export class PagesModule {

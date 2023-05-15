@@ -6,16 +6,16 @@
   <mat-card class="form-card">
     <mat-card-subtitle>Question</mat-card-subtitle>
     <div class="form-row">
-      <mat-form-field appearance="fill">
-        <mat-label>Question</mat-label>
-        <input type="text" matInput formControlName="name">
+      <mat-form-field appearance="fill" (click)="nameMathField?.focus()">
+        <mat-label>Nom de la question</mat-label>
+        <input type="text" matInput formControlName="name" [value]="nameMathField?.value ?? ''" #nameField>
         <mat-error>Ce champ est requis</mat-error>
       </mat-form-field>
     </div>
     <p>Choisir une difficulté : </p>
     <div class="form-row">
       <mat-radio-group formControlName="difficulty" class="radio-group" *ngIf="localDifficulties as difficulties">
-        <mat-radio-button *ngFor="let difficulty of difficulties" [value]="difficulty"
+        <mat-radio-button *ngFor="let difficulty of difficulties" color="primary" [value]="difficulty"
                           (click)="updateDifficulty(difficulty.toString())">{{ difficulty }}</mat-radio-button>
       </mat-radio-group>
     </div>
@@ -33,7 +33,8 @@
       <p>Choisir une catégorie : </p>
       <div class="form-row">
         <mat-radio-group formControlName="category" class="radio-group" *ngIf="localCategories as categories">
-          <mat-radio-button *ngFor="let category of categories" [value]="category">{{ category }}</mat-radio-button>
+          <mat-radio-button *ngFor="let category of categories" color="primary"
+                            [value]="category">{{ category }}</mat-radio-button>
         </mat-radio-group>
       </div>
       <ng-container *ngIf="localCategories as categories">
@@ -59,19 +60,22 @@
                 matTooltip="Supprimer la réponse" matTooltipPosition="left">
           <mat-icon>delete</mat-icon>
         </button>
-        <mat-form-field appearance="fill">
+
+        <mat-form-field appearance="fill" (click)="answerMathFields[i]?.focus()">
           <mat-label>Réponse {{ i + 1 }}</mat-label>
-          <input type="text" matInput formControlName="name" required>
+          <input type="text" matInput formControlName="name" required [value]="answerMathFields[i]?.value ?? ''"
+                 [id]="'answer' + i + 'Field'">
           <mat-error>Ce champ est requis</mat-error>
         </mat-form-field>
+
         <mat-radio-group (change)="updateCorrectAnswer(i)" formControlName="answer">
-          <mat-radio-button style="margin-left: 10px; margin-bottom: 15px" [value]="true"
+          <mat-radio-button style="margin-left: 10px; margin-bottom: 15px;" color="primary" [value]="true"
                             [checked]="answer.get('answer')?.value">Bonne réponse
           </mat-radio-button>
         </mat-radio-group>
       </div>
-      <div>
-        <button mat-flat-button color="primary" (click)="addAnswer()" *ngIf="propositions.length < 4"
+      <div *ngIf="propositions.value.length > 0">
+        <button mat-flat-button class="action-buttons" (click)="addAnswer()" *ngIf="propositions.length < 4"
                 [disabled]="!propositions.at(propositions.length - 1).value.name.length">
           Ajouter une réponse +
         </button>
@@ -81,22 +85,20 @@
   </mat-card>
 
   <mat-card-actions>
-    <button *ngIf="!currentQuestionId" mat-flat-button color="primary" (click)="onSubmitForm()"
+    <button *ngIf="!currentQuestionId" mat-flat-button (click)="onSubmitForm()"
             [disabled]="(loading$ | async) || (!mainForm.valid)" matTooltip="Enregister la nouvelle question"
-            matTooltipPosition="left">
+            matTooltipPosition="left" class="action-buttons">
       <mat-icon class="btn_icon">save</mat-icon>
     </button>
-    <button *ngIf="currentQuestionId" mat-flat-button color="primary" (click)="onSubmitForm()"
+    <button *ngIf="currentQuestionId" mat-flat-button (click)="onSubmitForm()"
             [disabled]="(loading$ | async) || (!mainForm.valid)" matTooltip="Sauvegarder la question"
-            matTooltipPosition="left">
+            matTooltipPosition="left" class="action-buttons">
       <mat-icon class="btn_icon">save</mat-icon>
     </button>
   </mat-card-actions>
-  <button mat-flat-button color="primary" (click)="onGoBack()" [disabled]="loading$ | async" matTooltip="Retour"
-          matTooltipPosition="right">
+  <button mat-flat-button (click)="onGoBack()" [disabled]="loading$ | async" matTooltip="Retour"
+          matTooltipPosition="right" class="action-buttons">
     <mat-icon class="btn_icon">arrow_back</mat-icon>
   </button>
-  <div class="spinner" *ngIf="loading$ | async">
-    <img src="../../../assets/images/logo.png" alt="spinner" class="spinner-image">
-  </div>
 </mat-card>
+<app-spinner *ngIf="loading$ | async"></app-spinner>

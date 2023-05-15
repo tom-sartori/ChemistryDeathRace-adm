@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {BehaviorSubject, catchError, map, mapTo, Observable, of, switchMap, take, tap} from "rxjs";
-import {Question} from "../models/question.model";
-import {environment} from "../../environments/environment";
+import { BehaviorSubject, catchError, map, mapTo, Observable, of, switchMap, take, tap } from "rxjs";
+import { Question } from "../models/question.model";
+import { environment } from "../../environments/environment";
+
 // import {environment} from "../../environments/environment.prod";
 
 @Injectable()
 export class QuestionsService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   private _loading$ = new BehaviorSubject<boolean>(false);
   get loading$(): Observable<boolean> {
@@ -94,13 +96,7 @@ export class QuestionsService {
   }
 
   getQuestionById(id: string): Observable<Question> {
-    if (!this._questions$.value.length) {
-      return this.http.get<Question>(`${environment.apiUrl}/question/id/${id}`);
-    } else {
-      return this.questions$.pipe(
-        map(games => games.filter(game => game.id === id)[0])
-      );
-    }
+    return this.http.get<Question>(`${environment.apiUrl}/question/id/${id}`);
   }
 
   deleteQuestion(id: string) {
@@ -123,5 +119,13 @@ export class QuestionsService {
       catchError(() => of(false).pipe()),
       tap(() => this.setLoadingStatus(false))
     );
+  }
+
+  updateCategory(selectedDifficulty: string, oldCategory: string, editedCategory: string): Observable<any> {
+    return this.http.put(`${environment.apiUrl}/question/difficulty/${selectedDifficulty}/category/${oldCategory}`, editedCategory);
+  }
+
+  updateDifficulty(oldDifficulty: string, editedDifficulty: string): Observable<any> {
+    return this.http.put(`${environment.apiUrl}/question/difficulty/${oldDifficulty}`, editedDifficulty);
   }
 }

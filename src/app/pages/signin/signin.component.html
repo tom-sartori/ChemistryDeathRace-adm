@@ -22,14 +22,10 @@
       </mat-form-field>
     </div>
     <div class="connection-buttons">
-      <button mat-flat-button color="primary" (click)="signIn()"  [disabled]="!(emailCtrl.valid && passwordCtrl.valid)">
+      <button mat-flat-button color="primary" (click)="signIn()" [disabled]="!(emailCtrl.valid && passwordCtrl.valid)">
         Se connecter
       </button>
     </div>
-    <div class="spinner" *ngIf="loading">
-      <img src="../../../assets/images/logo.png" alt="spinner" class="spinner-image">
-    </div>
   </mat-card-content>
 </mat-card>
-
-
+<app-spinner *ngIf="loading"></app-spinner>

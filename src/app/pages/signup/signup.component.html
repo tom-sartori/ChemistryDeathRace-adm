@@ -30,14 +30,11 @@
       </mat-form-field>
     </div>
     <div class="connection-buttons">
-      <button mat-flat-button color="primary" (click)="signUp()"  [disabled]="!(emailCtrl.valid && passwordCtrl.valid && confirmCtrl.valid)">
+      <button mat-flat-button color="primary" (click)="signUp()"
+              [disabled]="!(emailCtrl.valid && passwordCtrl.valid && confirmCtrl.valid)">
         S'inscrire
       </button>
     </div>
-    <div class="spinner" *ngIf="loading">
-      <img src="../../../assets/images/logo.png" alt="spinner" class="spinner-image">
-    </div>
   </mat-card-content>
 </mat-card>
-
-
+<app-spinner *ngIf="loading"></app-spinner>

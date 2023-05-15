@@ -7,10 +7,6 @@
 
   <app-questions-list-toolbar (onSearch)="search($event)"></app-questions-list-toolbar>
 
-  <div *ngIf="loading$ | async" class="spinner">
-    <img src="../../../assets/images/logo.png" alt="spinner" class="spinner-image">
-  </div>
-
   <ng-container *ngIf="!(loading$ | async)">
     <ng-container *ngIf="questions$ | async as questions">
       <p *ngIf="!questions.length">Aucune question disponible. </p>
@@ -50,3 +46,4 @@
     </mat-expansion-panel>
   </mat-accordion>
 </mat-card>
+<app-spinner *ngIf="loading$ | async"></app-spinner>
