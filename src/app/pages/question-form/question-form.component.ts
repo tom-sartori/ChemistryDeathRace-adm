@@ -61,9 +61,9 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     MathfieldElement.fontsDirectory = null;
     MathfieldElement.soundsDirectory = null;
 
-    requestAnimationFrame(() => this.nameMathField = this.addMathField(this.nameField.nativeElement, this.mainForm.controls['name']));
-    for (let i: number = 0; i < this.propositions.length; i++) {
-      requestAnimationFrame(() => this.setPropositionMathField(i));
+    if (this.router.url.includes("add")) {
+      this.nameMathField = this.addMathField(this.nameField.nativeElement, this.mainForm.controls['name']);
+      this.setPropositionMathField(0);
     }
   }
 
@@ -138,6 +138,11 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
         difficulty: question.difficulty,
       });
       this.questionsService.setLoadingStatus(false);
+
+      requestAnimationFrame(() => this.nameMathField = this.addMathField(this.nameField.nativeElement, this.mainForm.controls['name']));
+      for (let i: number = 0; i < this.propositions.length; i++) {
+        requestAnimationFrame(() => this.setPropositionMathField(i));
+      }
     });
   }
 
@@ -187,7 +192,6 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       name: ['', Validators.required],
       answer: [false, Validators.required],
     }));
-    requestAnimationFrame(() => this.setPropositionMathField(this.propositions.length - 1));
   }
 
   removeAnswer(index: number): void {
@@ -253,6 +257,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     });
 
     mfe.oninput = () => formControl.patchValue(this.latexToUtf8Service.convert(mfe?.value ?? formControl.value))
+    sibling.style.height = '0';
     sibling.insertAdjacentElement('afterend', mfe);
 
     return mfe;
