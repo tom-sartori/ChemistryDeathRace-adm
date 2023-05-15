@@ -61,6 +61,23 @@ export class QuestionsService {
     ).subscribe();
   }
 
+  getQuestionsFromServerObservable(difficulty: string | null = null, category: string | null = null): Observable<Question[]> {
+    let url = `${environment.apiUrl}/question`;
+    if (difficulty) {
+      url += `/difficulty/${difficulty}`;
+      if (category) {
+        url += `/category/${category}`;
+      }
+    }
+
+    return this.http.get<Question[]>(url).pipe(
+      tap(games => {
+        this._questions$.next(games);
+        this.setLoadingStatus(false);
+      })
+    );
+  }
+
   getDifficultiesFromServer() {
     this.setLoadingStatus(true);
     this.http.get<String[]>(`${environment.apiUrl}/question/difficulty`).pipe(

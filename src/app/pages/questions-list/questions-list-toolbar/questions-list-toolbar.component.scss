@@ -1,3 +1,5 @@
+@import "src/assets/styles/colors.scss";
+
 .w-100 {
   width: 100%;
 }
@@ -8,4 +10,10 @@
 
 .w-25 {
   width: 25%;
+}
+
+.export-button {
+  color: $blue-enscm;
+  text-align: center;
+  margin-bottom: 1.3em;
 }
