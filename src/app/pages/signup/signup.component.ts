@@ -64,11 +64,10 @@ export class SignupComponent implements OnInit {
         this.router.navigateByUrl('/signin').then(() => {
           this.snackBarService.openSuccess('Votre compte a bien été créé');
         });
+        this.loading = false;
       },
       error: () => {
         this.snackBarService.openError('Erreur lors de la création du compte');
-      },
-      complete: () => {
         this.loading = false;
       }
     };

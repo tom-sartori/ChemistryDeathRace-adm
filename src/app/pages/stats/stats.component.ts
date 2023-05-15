@@ -12,15 +12,17 @@ import { SnackBarService } from '@services/snack-bar.service';
 })
 export class StatsComponent implements OnInit, AfterViewInit {
 
-  numberOfGamePlayed: number;
-  mostPlayedDifficulty: string;
-  greatAnswerPercentage: number;
-  averageDiceSize: number;
-  averageGameTime: number;
-  numberOfPlayers: number;
+  public loading: boolean;
 
-  displayedColumns: string[];
-  dataSource: MatTableDataSource<Stat>;
+  public numberOfGamePlayed: number;
+  public mostPlayedDifficulty: string;
+  public greatAnswerPercentage: number;
+  public averageDiceSize: number;
+  public averageGameTime: number;
+  public numberOfPlayers: number;
+
+  public displayedColumns: string[];
+  public dataSource: MatTableDataSource<Stat>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -34,6 +36,8 @@ export class StatsComponent implements OnInit, AfterViewInit {
     this.averageGameTime = -1;
     this.numberOfPlayers = -1;
     this.dataSource = new MatTableDataSource<Stat>([]);
+
+    this.loading = true;
 
     this.getStats();
     this.displayedColumns = ['name', 'difficulty', 'percentage'];
@@ -80,9 +84,19 @@ export class StatsComponent implements OnInit, AfterViewInit {
 
   private getObserver(errorMsg: string, successFunc: (data: any) => void) {
     return {
-      next: successFunc,
+      next: () => {
+        successFunc(successFunc.arguments);
+        this.loading = this.dataSource.data.length == 0 ||
+          this.numberOfGamePlayed == -1 ||
+          this.mostPlayedDifficulty == '' ||
+          this.greatAnswerPercentage == -1 ||
+          this.averageDiceSize == -1 ||
+          this.averageGameTime == -1 ||
+          this.numberOfPlayers == -1
+      },
       error: (error: any) => {
         this.snackBarService.openError(errorMsg);
+        this.loading = false;
       }
     };
   }

@@ -72,8 +72,15 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
   }
 
   private initDifficulties() {
-    this.questionsService.getDifficulties().subscribe(x => {
-      this.localDifficulties = x;
+    this.questionsService.getDifficulties().subscribe({
+      next: (difficulties: string[]) => {
+        this.localDifficulties = difficulties;
+        this.loading = false;
+      },
+      error: () => {
+        this.snackBarService.openError('Erreur lors du chargement des difficultés');
+        this.loading = false;
+      }
     });
   }
 
@@ -183,11 +190,11 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       next: (question: Question) => {
         this.resetForm();
         this.snackBarService.openSuccess(successMessage);
+        this.loading = false;
+        this.onGoBack();
       },
       error: (err: any) => {
         this.snackBarService.openError(errorMessage);
-      },
-      complete: () => {
         this.loading = false;
         this.onGoBack();
       }
@@ -241,9 +248,15 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
   public updateDifficulty(newDifficulty: string) {
     this.currentDifficulty = newDifficulty;
     this.loading = true;
-    this.questionsService.getCategories(newDifficulty).subscribe(x => {
-      this.localCategories = x;
-      this.loading = false;
+    this.questionsService.getCategories(newDifficulty).subscribe({
+      next: (categories: string[]) => {
+        this.localCategories = categories;
+        this.loading = false;
+      },
+      error: (err: any) => {
+        this.snackBarService.openError('Erreur lors de la récupération des catégories');
+        this.loading = false;
+      }
     });
   }
 

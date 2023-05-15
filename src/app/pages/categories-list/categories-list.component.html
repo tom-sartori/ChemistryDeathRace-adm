@@ -1,5 +1,8 @@
 <h1>Liste des catégories</h1>
-<mat-card *ngIf="!loading">
+<mat-card *ngIf="!loading && !difficulties">
+  <p>Il n'y a aucune difficulté.</p>
+</mat-card>
+<mat-card *ngIf="!loading && difficulties">
   <mat-button-toggle-group #difficultyGroup="matButtonToggleGroup" (change)="onDifficultyChange(difficultyGroup.value)">
     <mat-button-toggle *ngFor="let difficulty of difficulties" [value]="difficulty"
                        [checked]="selectedDifficulty == difficulty">

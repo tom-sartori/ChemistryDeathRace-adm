@@ -19,7 +19,7 @@ export class SnackBarService {
     return this.open(message, '×', {
       panelClass: 'success',
       verticalPosition: 'top',
-      duration: 3000
+      duration: 4000
     });
   }
 
@@ -27,7 +27,7 @@ export class SnackBarService {
     return this.open(message, '×', {
       panelClass: 'error',
       verticalPosition: 'top',
-      duration: 3000
+      duration: 4000
     });
   }
 }

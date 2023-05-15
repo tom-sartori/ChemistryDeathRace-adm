@@ -57,11 +57,12 @@ export class CategoriesListComponent implements OnInit {
 
   private getObserver(successFunc: (data: any) => void, errorMsg: string) {
     return {
-      next: successFunc,
+      next: () => {
+        successFunc(successFunc.arguments);
+        this.loading = false;
+      },
       error: () => {
         this.snackBarService.openError(errorMsg);
-      },
-      complete: () => {
         this.loading = false;
       }
     };
@@ -80,11 +81,10 @@ export class CategoriesListComponent implements OnInit {
           next: () => {
             this.categories[index] = this.editedCategory;
             this.snackBarService.openSuccess('Catégorie mise à jour');
+            this.loading = false;
           },
           error: () => {
             this.snackBarService.openError('Erreur lors de la mise à jour de la catégorie');
-          },
-          complete: () => {
             this.loading = false;
           }
         });

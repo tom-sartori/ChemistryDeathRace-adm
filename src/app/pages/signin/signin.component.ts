@@ -49,8 +49,6 @@ export class SigninComponent implements OnInit {
       },
       error: () => {
         this.snackBarService.openError('Erreur lors de la connexion');
-      },
-      complete: () => {
         this.loading = false;
       }
     };
@@ -63,9 +61,11 @@ export class SigninComponent implements OnInit {
         this.authService.setIsUserLoggedIn(true);
         document.dispatchEvent(new Event('logged-in'));
         this.router.navigateByUrl('/questions');
+        this.loading = false;
       },
       error: () => {
         this.snackBarService.openError('Erreur lors de la connexion');
+        this.loading = false;
       }
     };
   }

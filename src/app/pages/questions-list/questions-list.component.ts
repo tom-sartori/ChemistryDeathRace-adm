@@ -109,11 +109,12 @@ export class QuestionsListComponent implements OnInit {
 
   private getObserver(nextFunc: (data: any) => void, errorMessage: string) {
     return {
-      next: nextFunc,
+      next: () => {
+        nextFunc(nextFunc.arguments);
+        this.loading = false;
+      },
       error: () => {
         this.snackBarService.openError(errorMessage);
-      },
-      complete: () => {
         this.loading = false;
       }
     };
