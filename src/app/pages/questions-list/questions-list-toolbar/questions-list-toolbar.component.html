@@ -25,11 +25,6 @@
     </mat-form-field>
 
   </form>
-  <button mat-button [matMenuTriggerFor]="menu" matTooltip="Exporter les questions" class="export-button">
-    <mat-icon>ios_share</mat-icon>
-  </button>
-  <mat-menu #menu="matMenu" class="menu-button">
-    <button mat-menu-item (click)="onExport('csv')">Exporter en CSV</button>
-    <button mat-menu-item (click)="onExport('json')">Exporter en JSON</button>
-  </mat-menu>
+
+  <app-export-button [form]="form"></app-export-button>
 </mat-card-title-group>

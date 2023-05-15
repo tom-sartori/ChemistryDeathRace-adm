@@ -3,6 +3,8 @@ import { StatsService } from '@services/stats.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { Stat } from '@models/stat.model';
+import { SnackBarService } from '@services/snack-bar.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-stats',
@@ -23,14 +25,15 @@ export class StatsComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private statsService: StatsService) {
+  constructor(private statsService: StatsService,
+              private snackBarService: SnackBarService) {
 
-    this.numberOfGamePlayed = 0;
+    this.numberOfGamePlayed = -1;
     this.mostPlayedDifficulty = '';
-    this.greatAnswerPercentage = 0;
-    this.averageDiceSize = 0;
-    this.averageGameTime = 0;
-    this.numberOfPlayers = 0;
+    this.greatAnswerPercentage = -1;
+    this.averageDiceSize = -1;
+    this.averageGameTime = -1;
+    this.numberOfPlayers = -1;
     this.dataSource = new MatTableDataSource<Stat>([]);
 
     this.getStats();
@@ -47,26 +50,43 @@ export class StatsComponent implements OnInit, AfterViewInit {
   }
 
   private getStats() {
-    this.statsService.getGamesPlayed().subscribe((data) => {
+    this.fetchStat(this.statsService.getGamesPlayed, 'Erreur lors du chargement du nombre de parties jouées', (data: number) => {
       this.numberOfGamePlayed = data;
     });
-    this.statsService.getMostPlayedDifficulty().subscribe((data) => {
-      this.mostPlayedDifficulty = data
+
+    this.fetchStat(this.statsService.getMostPlayedDifficulty, 'Erreur lors du chargement de la difficulté la plus jouée', (data: string) => {
+      this.mostPlayedDifficulty = data;
     });
-    this.statsService.getGreatAnswerPercentage().subscribe((data) => {
+
+    this.fetchStat(this.statsService.getGreatAnswerPercentage, 'Erreur lors du chargement du pourcentage de bonnes réponses', (data: number) => {
       this.greatAnswerPercentage = data;
     });
-    this.statsService.getAverageDiceSize().subscribe((data) => {
+
+    this.fetchStat(this.statsService.getAverageDiceSize, 'Erreur lors du chargement de la taille moyenne des dés', (data: number) => {
       this.averageDiceSize = data;
     });
-    this.statsService.getAverageGameTime().subscribe((data) => {
-      this.averageGameTime = data / 1000 / 60;
+
+    this.fetchStat(this.statsService.getAverageGameTime, 'Erreur lors du chargement de la durée moyenne des parties', (data: number) => {
+      this.averageGameTime = data / 1000 / 60; // Convert milliseconds to minutes
     });
-    this.statsService.getStatsByQuestion().subscribe((data) => {
+
+    this.fetchStat(this.statsService.getStatsByQuestion, 'Erreur lors du chargement des statistiques par question', (data: Stat[]) => {
       this.dataSource = new MatTableDataSource(data);
     });
-    this.statsService.getAverageNumberOfPlayers().subscribe((data) => {
+
+    this.fetchStat(this.statsService.getAverageNumberOfPlayers, 'Erreur lors du chargement du nombre moyen de joueurs', (data: number) => {
       this.numberOfPlayers = data;
     });
   }
+
+  private fetchStat(func: () => Observable<any>, errorMsg: string, successFunc: (data: any) => void) {
+    func()
+      .subscribe({
+        next: successFunc,
+        error: (error: any) => {
+          this.snackBarService.openError(errorMsg);
+        }
+      });
+  }
+
 }

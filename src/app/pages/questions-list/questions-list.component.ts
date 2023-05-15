@@ -1,59 +1,63 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Question } from '@models/question.model';
 import { QuestionsService } from '@services/questions.service';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { QuestionsListToolbar } from './questions-list-toolbar/questions-list-toolbar';
+import { SnackBarService } from '@services/snack-bar.service';
 
 @Component({
   selector: 'app-questions-list',
   templateUrl: './questions-list.component.html',
-  styleUrls: ['./questions-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./questions-list.component.scss']
 })
 export class QuestionsListComponent implements OnInit {
-  loading$!: Observable<boolean>;
-  questions$!: Observable<Question[]>
+  public loading: boolean;
+  public displayedQuestions: Question[];
+  private questions: Question[];
   private filter: QuestionsListToolbar;
 
   constructor(
     private questionsService: QuestionsService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private snackBarService: SnackBarService
   ) {
+    this.loading = true;
+    this.questions = [];
+    this.displayedQuestions = [];
     this.filter = new QuestionsListToolbar('', null, null);
   }
 
   ngOnInit(): void {
-    this.loading$ = this.questionsService.loading$;
-    this.questions$ = this.questionsService.questions$;
-    this.questionsService.getQuestionsFromServer();
+    this.getQuestions();
   }
 
-  onNewQuestion() {
+  private getQuestions(difficulty: string | null = null, category: string | null = null): void {
+    this.questionsService.getQuestions(difficulty, category)
+      .subscribe(this.getObserver((questions: Question[]) => {
+        this.questions = questions;
+        this.displayedQuestions = questions;
+      }, 'Erreur lors du chargement des questions'));
+  }
+
+  public onNewQuestion() {
     this.router.navigateByUrl('/questions/add')
   }
 
-  onEditQuestion(id: string) {
+  public onEditQuestion(id: string) {
     this.router.navigateByUrl('/questions/update/' + id)
   }
 
-  onDeleteQuestion(id: string) {
+  public onDeleteQuestion(id: string) {
     if (confirm('Voulez vous vraiment supprimer cette question ?')) {
-      this.questions$.subscribe(
-        (questions: Question[]) => {
-          let question = questions.find(question => question.id === id);
-          if (question) {
-            this.questionsService.deleteQuestion(question.id);
-            Notify.success('Question supprimé avec succès !')
-          }
-        });
+      this.loading = true;
+      this.questionsService.deleteQuestion(id)
+        .subscribe(this.getObserver(() => this.getQuestions(), 'Erreur lors de la suppression de la question'));
     }
   }
 
-  search(value: QuestionsListToolbar): void {
+  public search(value: QuestionsListToolbar): void {
     if (value.difficulty !== this.filter.difficulty) {
       value.category = null;
     }
@@ -67,12 +71,24 @@ export class QuestionsListComponent implements OnInit {
   }
 
   private filterByQuestionName(search: string) {
-    this.questions$ = this.questionsService.questions$.pipe(
-      map(questions => questions.filter(question => question.name.toLowerCase().includes(search)))
-    );
+    this.displayedQuestions = this.questions.filter(question => {
+      return question.name.toLowerCase().includes(search.toLowerCase());
+    });
   }
 
   private filterQuestions(difficulty: string | null, category: string | null) {
-    this.questionsService.getQuestionsFromServer(difficulty, category);
+    this.getQuestions(difficulty, category);
+  }
+
+  private getObserver(nextFunc: (data: any) => void, errorMessage: string) {
+    return {
+      next: nextFunc,
+      error: () => {
+        this.snackBarService.openError(errorMessage);
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    };
   }
 }

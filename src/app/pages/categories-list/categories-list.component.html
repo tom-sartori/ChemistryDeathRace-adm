@@ -1,5 +1,5 @@
 <h1>Liste des catégories</h1>
-<mat-card>
+<mat-card *ngIf="!loading">
   <mat-button-toggle-group #difficultyGroup="matButtonToggleGroup" (change)="onDifficultyChange(difficultyGroup.value)">
     <mat-button-toggle *ngFor="let difficulty of difficulties" [value]="difficulty"
                        [checked]="selectedDifficulty == difficulty">
@@ -9,7 +9,7 @@
   <div class="difficulty">
     <ng-container *ngIf="!isEditingDifficulty">
       <h2>{{ selectedDifficulty }}</h2>
-      <button mat-icon-button color="primary" (click)="startEditingDifficulty()">
+      <button mat-icon-button color="primary" (click)="startEditing('difficulty')">
         <mat-icon>edit</mat-icon>
       </button>
     </ng-container>
@@ -28,7 +28,7 @@
     <mat-list-item *ngFor="let category of categories; let i = index">
       <ng-container *ngIf="!isEditing[i]" class="normal-category">
         <h4>{{ category }}</h4>
-        <button mat-icon-button color="primary" (click)="startEditing(i)">
+        <button mat-icon-button color="primary" (click)="startEditing('category', i)">
           <mat-icon>edit</mat-icon>
         </button>
       </ng-container>

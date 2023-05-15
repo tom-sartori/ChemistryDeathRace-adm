@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@services/auth.service';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { SnackBarService } from '@services/snack-bar.service';
 
 
 @Component({
@@ -20,7 +20,10 @@ export class SignupComponent implements OnInit {
   public loading: boolean;
   public hide: boolean;
 
-  constructor(public authService: AuthService, private router: Router) {
+  constructor(public authService: AuthService,
+              private router: Router,
+              private snackBarService: SnackBarService
+  ) {
     this.loading = false;
     this.hide = true;
     this.emailCtrl = new FormControl('', [Validators.required, Validators.email]);
@@ -37,6 +40,38 @@ export class SignupComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  public changeHide(): void {
+    this.hide = !this.hide;
+  }
+
+  public signUp(): void {
+    this.loading = true;
+    this.authService.signUp(this.emailCtrl.value, this.passwordCtrl.value)
+      .subscribe(this.getObserver())
+  }
+
+  public onEnter(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      this.signUp();
+    }
+  }
+
+  private getObserver() {
+    return {
+      next: () => {
+        this.router.navigateByUrl('/signin').then(() => {
+          this.snackBarService.openSuccess('Votre compte a bien été créé');
+        });
+      },
+      error: () => {
+        this.snackBarService.openError('Erreur lors de la création du compte');
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    };
   }
 
   private matchValuesValidator(main: string, confirm: string): ValidatorFn {
@@ -56,29 +91,5 @@ export class SignupComponent implements OnInit {
         }
       };
     };
-  }
-
-  public changeHide(): void {
-    this.hide = !this.hide;
-  }
-
-  public signUp(): void {
-    this.loading = true;
-    this.authService.signUp(this.emailCtrl.value, this.passwordCtrl.value).subscribe((response) => {
-      if (response) {
-        Notify.success('Votre compte a bien été créé !');
-        this.router.navigateByUrl('/signin');
-      }
-      else {
-        Notify.failure('Une erreur est survenue lors de la création de votre compte !');
-      }
-      this.loading = false;
-    })
-  }
-
-  public onEnter(event: KeyboardEvent): void {
-    if (event.key === 'Enter') {
-      this.signUp();
-    }
   }
 }

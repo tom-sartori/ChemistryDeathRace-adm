@@ -1,12 +1,12 @@
-<h1>Statistiques du jeu</h1>
-<mat-grid-list cols="2" gutterSize="10px" rowHeight="5:3"
-               *ngIf="numberOfGamePlayed > 0 &&
-               mostPlayedDifficulty != '' &&
-               greatAnswerPercentage > 0 &&
-               averageDiceSize > 0 &&
-               averageGameTime > 0 &&
-               numberOfPlayers > 0">
 
+<mat-grid-list cols="2" gutterSize="10px" rowHeight="5:3"
+               *ngIf="numberOfGamePlayed > -1 &&
+               mostPlayedDifficulty != '' &&
+               greatAnswerPercentage > -1 &&
+               averageDiceSize > -1 &&
+               averageGameTime > -1 &&
+               numberOfPlayers > -1">
+  <h1>Statistiques du jeu</h1>
   <mat-grid-tile *ngIf="numberOfGamePlayed">
     <app-stat-tile
       [header]="'Nombre de partie jouée'"
@@ -83,10 +83,10 @@
   <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons></mat-paginator>
 </div>
 
-<app-spinner *ngIf="dataSource.data.length == 0 &&
-      numberOfGamePlayed == 0 &&
-      mostPlayedDifficulty == '' &&
-      greatAnswerPercentage == 0 &&
-      averageDiceSize == 0 &&
-      averageGameTime == 0 &&
-      numberOfPlayers == 0"></app-spinner>
+<app-spinner *ngIf="dataSource.data.length == 0 ||
+      numberOfGamePlayed == -1 ||
+      mostPlayedDifficulty == '' ||
+      greatAnswerPercentage == -1 ||
+      averageDiceSize == -1 ||
+      averageGameTime == -1 ||
+      numberOfPlayers == -1"></app-spinner>

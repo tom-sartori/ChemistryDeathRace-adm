@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@services/auth.service';
 import { FormControl, Validators } from '@angular/forms';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { Router } from '@angular/router';
+import { SnackBarService } from '@services/snack-bar.service';
 
 
 @Component({
@@ -18,7 +18,10 @@ export class SigninComponent implements OnInit {
   loading: boolean
   hide: boolean;
 
-  constructor(public authService: AuthService, private router: Router) {
+  constructor(public authService: AuthService,
+              private router: Router,
+              private snackBarService: SnackBarService
+  ) {
     this.loading = false;
     this.hide = true;
     this.emailCtrl = new FormControl('', [Validators.required, Validators.email]);
@@ -34,28 +37,37 @@ export class SigninComponent implements OnInit {
 
   public signIn(): void {
     this.loading = true;
-    this.authService.get().subscribe((responseEnable) => {
-      if (responseEnable.enable) {
-        this.authService.signIn(this.emailCtrl.value, this.passwordCtrl.value).subscribe((response) => {
-          if (response.token) {
-            localStorage.setItem('token', JSON.stringify(response));
-            this.authService.setIsUserLoggedIn(true);
-            document.dispatchEvent(new Event('logged-in'));
-            this.router.navigateByUrl('/questions').catch((error) => {
-              Notify.failure('Erreur de redirection : ' + error.message);
-            });
-          }
-          else {
-            Notify.failure('Erreur d\'authentification');
-          }
-          this.loading = false;
-        });
-      }
-      else {
+    this.authService.get()
+      .subscribe(this.getObserverEnable())
+  }
+
+  private getObserverEnable() {
+    return {
+      next: () => {
+        this.authService.signIn(this.emailCtrl.value, this.passwordCtrl.value)
+          .subscribe(this.getObserverSignIn());
+      },
+      error: () => {
+        this.snackBarService.openError('Erreur lors de la connexion');
+      },
+      complete: () => {
         this.loading = false;
-        Notify.failure('Erreur serveur');
       }
-    })
+    };
+  }
+
+  private getObserverSignIn() {
+    return {
+      next: (response: any) => {
+        localStorage.setItem('token', JSON.stringify(response));
+        this.authService.setIsUserLoggedIn(true);
+        document.dispatchEvent(new Event('logged-in'));
+        this.router.navigateByUrl('/questions');
+      },
+      error: () => {
+        this.snackBarService.openError('Erreur lors de la connexion');
+      }
+    };
   }
 
   public onEnter(event: KeyboardEvent): void {

@@ -3,18 +3,17 @@
         matTooltipPosition="right">
   <mat-icon class="btn_icon">add</mat-icon>
 </button>
+
 <mat-card>
 
   <app-questions-list-toolbar (onSearch)="search($event)"></app-questions-list-toolbar>
 
-  <ng-container *ngIf="!(loading$ | async)">
-    <ng-container *ngIf="questions$ | async as questions">
-      <p *ngIf="!questions.length">Aucune question disponible. </p>
-    </ng-container>
+  <ng-container *ngIf="displayedQuestions.length === 0">
+    <p>Aucune question disponible. </p>
   </ng-container>
 
-  <mat-accordion *ngIf="questions$ | async as questions" class="panel-wrapper">
-    <mat-expansion-panel *ngFor="let question of questions" class="custom-panel">
+  <mat-accordion *ngIf="displayedQuestions.length > 0" class="panel-wrapper">
+    <mat-expansion-panel *ngFor="let question of displayedQuestions" class="custom-panel">
       <mat-expansion-panel-header>
         <div class="infos">
           <h1 class="question">{{ question.name }}</h1>
@@ -27,7 +26,7 @@
             <mat-icon>edit</mat-icon>
           </button>
           <button mat-icon-button (click)="onDeleteQuestion(question.id)" matTooltip="Supprimer la question"
-                  matTooltipPosition="right" color="warn" >
+                  matTooltipPosition="right" color="warn">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -45,5 +44,7 @@
       </div>
     </mat-expansion-panel>
   </mat-accordion>
+
 </mat-card>
-<app-spinner *ngIf="loading$ | async"></app-spinner>
+
+<app-spinner *ngIf="loading"></app-spinner>

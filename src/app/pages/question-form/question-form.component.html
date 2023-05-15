@@ -86,19 +86,19 @@
 
   <mat-card-actions>
     <button *ngIf="!currentQuestionId" mat-flat-button (click)="onSubmitForm()"
-            [disabled]="(loading$ | async) || (!mainForm.valid)" matTooltip="Enregister la nouvelle question"
+            [disabled]="loading || (!mainForm.valid)" matTooltip="Enregister la nouvelle question"
             matTooltipPosition="left" class="action-buttons">
       <mat-icon class="btn_icon">save</mat-icon>
     </button>
     <button *ngIf="currentQuestionId" mat-flat-button (click)="onSubmitForm()"
-            [disabled]="(loading$ | async) || (!mainForm.valid)" matTooltip="Sauvegarder la question"
+            [disabled]="loading || (!mainForm.valid)" matTooltip="Sauvegarder la question"
             matTooltipPosition="left" class="action-buttons">
       <mat-icon class="btn_icon">save</mat-icon>
     </button>
   </mat-card-actions>
-  <button mat-flat-button (click)="onGoBack()" [disabled]="loading$ | async" matTooltip="Retour"
+  <button mat-flat-button (click)="onGoBack()" [disabled]="loading" matTooltip="Retour"
           matTooltipPosition="right" class="action-buttons">
     <mat-icon class="btn_icon">arrow_back</mat-icon>
   </button>
 </mat-card>
-<app-spinner *ngIf="loading$ | async"></app-spinner>
+<app-spinner *ngIf="loading"></app-spinner>
