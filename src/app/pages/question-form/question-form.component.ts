@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Notify } from "notiflix/build/notiflix-notify-aio";
 import { LatexToUtf8Service } from '../../services/latex-to-utf8.service';
 import { MathfieldElement } from 'mathlive';
+import { logMessages } from '@angular-devkit/build-angular/src/builders/browser-esbuild/esbuild';
 
 @Component({
   selector: 'app-question-form',
@@ -237,7 +238,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
 
   private addMathField(sibling: HTMLElement, formControl: AbstractControl<any>): MathfieldElement {
     let mfe: MathfieldElement = new MathfieldElement();
-    mfe.setValue(formControl.value);
+    mfe.setValue(formControl.value.replace(/ /g, '\\:'));
     mfe.style.width = '100%';
     mfe.style.backgroundColor = 'inherit';
     mfe.style.border = 'none';
@@ -248,6 +249,15 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       sibling.focus();
       mfe.focus();
     }
+
+    mfe.addEventListener('beforeinput', (ev) => {
+      if (ev.inputType === 'insertFromPaste' && ev.data) {
+        let paste: string = ev.data;
+        paste = paste.replace(/ /g, '\\:');
+        mfe.setValue(paste);
+        ev.preventDefault();
+      }
+    });
 
     mfe.oninput = () => formControl.patchValue(this.latexToUtf8Service.convert(mfe?.value ?? formControl.value))
     sibling.insertAdjacentElement('afterend', mfe);
