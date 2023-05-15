@@ -1,21 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Question } from '@models/question.model';
 import { QuestionsService } from '@services/questions.service';
 import { QuestionsListToolbar } from './questions-list-toolbar/questions-list-toolbar';
 import { SnackBarService } from '@services/snack-bar.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-questions-list',
   templateUrl: './questions-list.component.html',
-  styleUrls: ['./questions-list.component.scss']
+  styleUrls: ['./questions-list.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed, void', style({height: '0px'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition('expanded <=> void', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
+    ])
+  ]
 })
 export class QuestionsListComponent implements OnInit {
   public loading: boolean;
-  public displayedQuestions: Question[];
+  public displayedQuestions: MatTableDataSource<Question>;
   private questions: Question[];
   private filter: QuestionsListToolbar;
+
+  public columnsToDisplay: string[];
+  public columnsToDisplayWithExpand: string[];
+  public expandedQuestion: Question | null;
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private questionsService: QuestionsService,
@@ -25,19 +42,29 @@ export class QuestionsListComponent implements OnInit {
   ) {
     this.loading = true;
     this.questions = [];
-    this.displayedQuestions = [];
+    this.displayedQuestions = new MatTableDataSource<Question>([]);
     this.filter = new QuestionsListToolbar('', null, null);
+
+    this.columnsToDisplay = ['name', 'difficulty', 'category'];
+    this.columnsToDisplayWithExpand = [...this.columnsToDisplay, 'action']
+    this.expandedQuestion = null;
   }
 
   ngOnInit(): void {
     this.getQuestions();
   }
 
+  ngAfterViewInit() {
+    if (this.displayedQuestions) {
+      this.displayedQuestions.paginator = this.paginator;
+    }
+  }
+
   private getQuestions(difficulty: string | null = null, category: string | null = null): void {
     this.questionsService.getQuestions(difficulty, category)
       .subscribe(this.getObserver((questions: Question[]) => {
         this.questions = questions;
-        this.displayedQuestions = questions;
+        this.displayedQuestions.data = questions;
       }, 'Erreur lors du chargement des questions'));
   }
 
@@ -71,7 +98,7 @@ export class QuestionsListComponent implements OnInit {
   }
 
   private filterByQuestionName(search: string) {
-    this.displayedQuestions = this.questions.filter(question => {
+    this.displayedQuestions.data = this.questions.filter(question => {
       return question.name.toLowerCase().includes(search.toLowerCase());
     });
   }
@@ -90,5 +117,10 @@ export class QuestionsListComponent implements OnInit {
         this.loading = false;
       }
     };
+  }
+
+  public toggleRow(row: Question, event: Event) {
+    this.expandedQuestion = this.expandedQuestion === row ? null : row;
+    event.stopPropagation();
   }
 }

@@ -23,7 +23,7 @@
       <mat-form-field appearance="fill">
         <mat-label>Ajouter une difficulté</mat-label>
         <input type="text" matInput [formControl]="difficultyCtrl">
-        <button mat-flat-button matSuffix style="background-color: transparent" aria-label="Clear"
+        <button mat-flat-button matSuffix class="local-add-button" aria-label="Add difficulty"
                 (click)="addDifficultyLocally()" [disabled]="!difficultyCtrl.value">
           Ajouter
         </button>
@@ -42,7 +42,7 @@
           <mat-form-field appearance="fill">
             <mat-label>Ajouter une catégorie</mat-label>
             <input type="text" matInput [formControl]="categoryCtrl">
-            <button mat-flat-button matSuffix style="background-color: transparent" aria-label="Clear"
+            <button mat-flat-button matSuffix class="local-add-button" aria-label="Add category"
                     (click)="addCategoryLocally()" [disabled]="!categoryCtrl.value">
               Ajouter
             </button>
@@ -69,7 +69,7 @@
         </mat-form-field>
 
         <mat-radio-group (change)="updateCorrectAnswer(i)" formControlName="answer">
-          <mat-radio-button style="margin-left: 10px; margin-bottom: 15px;" color="primary" [value]="true"
+          <mat-radio-button class="answer-radio" color="primary" [value]="true"
                             [checked]="answer.get('answer')?.value">Bonne réponse
           </mat-radio-button>
         </mat-radio-group>

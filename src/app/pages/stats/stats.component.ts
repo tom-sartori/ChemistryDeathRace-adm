@@ -4,7 +4,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { Stat } from '@models/stat.model';
 import { SnackBarService } from '@services/snack-bar.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-stats',
@@ -50,43 +49,42 @@ export class StatsComponent implements OnInit, AfterViewInit {
   }
 
   private getStats() {
-    this.fetchStat(this.statsService.getGamesPlayed, 'Erreur lors du chargement du nombre de parties jouées', (data: number) => {
+    this.statsService.getGamesPlayed().subscribe(this.getObserver('Erreur lors du chargement du nombre de parties jouées', (data: number) => {
       this.numberOfGamePlayed = data;
-    });
+    }));
 
-    this.fetchStat(this.statsService.getMostPlayedDifficulty, 'Erreur lors du chargement de la difficulté la plus jouée', (data: string) => {
+    this.statsService.getMostPlayedDifficulty().subscribe(this.getObserver('Erreur lors du chargement de la difficulté la plus jouée', (data: string) => {
       this.mostPlayedDifficulty = data;
-    });
+    }));
 
-    this.fetchStat(this.statsService.getGreatAnswerPercentage, 'Erreur lors du chargement du pourcentage de bonnes réponses', (data: number) => {
+    this.statsService.getGreatAnswerPercentage().subscribe(this.getObserver('Erreur lors du chargement du pourcentage de bonnes réponses', (data: number) => {
       this.greatAnswerPercentage = data;
-    });
+    }));
 
-    this.fetchStat(this.statsService.getAverageDiceSize, 'Erreur lors du chargement de la taille moyenne des dés', (data: number) => {
+    this.statsService.getAverageDiceSize().subscribe(this.getObserver('Erreur lors du chargement de la taille moyenne des dés', (data: number) => {
       this.averageDiceSize = data;
-    });
+    }));
 
-    this.fetchStat(this.statsService.getAverageGameTime, 'Erreur lors du chargement de la durée moyenne des parties', (data: number) => {
+    this.statsService.getAverageGameTime().subscribe(this.getObserver('Erreur lors du chargement de la durée moyenne des parties', (data: number) => {
       this.averageGameTime = data / 1000 / 60; // Convert milliseconds to minutes
-    });
+    }));
 
-    this.fetchStat(this.statsService.getStatsByQuestion, 'Erreur lors du chargement des statistiques par question', (data: Stat[]) => {
+    this.statsService.getStatsByQuestion().subscribe(this.getObserver('Erreur lors du chargement des statistiques par question', (data: Stat[]) => {
       this.dataSource = new MatTableDataSource(data);
-    });
+    }));
 
-    this.fetchStat(this.statsService.getAverageNumberOfPlayers, 'Erreur lors du chargement du nombre moyen de joueurs', (data: number) => {
+    this.statsService.getAverageNumberOfPlayers().subscribe(this.getObserver('Erreur lors du chargement du nombre moyen de joueurs', (data: number) => {
       this.numberOfPlayers = data;
-    });
+    }));
   }
 
-  private fetchStat(func: () => Observable<any>, errorMsg: string, successFunc: (data: any) => void) {
-    func()
-      .subscribe({
-        next: successFunc,
-        error: (error: any) => {
-          this.snackBarService.openError(errorMsg);
-        }
-      });
+  private getObserver(errorMsg: string, successFunc: (data: any) => void) {
+    return {
+      next: successFunc,
+      error: (error: any) => {
+        this.snackBarService.openError(errorMsg);
+      }
+    };
   }
 
 }
