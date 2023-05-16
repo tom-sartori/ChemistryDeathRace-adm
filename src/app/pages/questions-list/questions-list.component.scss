@@ -1,13 +1,5 @@
 @import "../../../assets/styles/colors";
 
-div {
-  border-bottom: $color-accent thin solid;
-}
-
-.spinner {
-  border-bottom: none;
-}
-
 .question {
   color: $blue-enscm;
   font-size: large;
@@ -16,26 +8,11 @@ div {
 }
 
 .infos {
-  border-bottom: none;
+  overflow: hidden;
 }
 
 .infos > p {
   margin: 0;
-}
-
-.panel-wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
-.custom-panel {
-  width: 100%;
-}
-
-.custom-panel > mat-expansion-panel-header {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  height: 100%;
 }
 
 a {
@@ -44,35 +21,55 @@ a {
   text-decoration: none;
 }
 
-.form {
-  width: 100%;
-}
-
-.search-bar {
-  width: 70%;
-}
-
-.search-type {
-  width: 30%;
-}
-
 .newButton {
   margin-bottom: 20px;
   background-color: $blue-enscm;
+}
+
+mat-table {
+  width: 100%;
+}
+
+.question-row td {
+  border-bottom-width: 0;
+}
+
+.mat-cell, .mat-header-cell {
+  padding: 10px;
+}
+
+tr.detail-row {
+  height: 0;
+}
+
+tr.question-row:not(.expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.question-row:not(.expanded-row):active {
+  background: $background-color;
+}
+
+.mat-column-name {
+  width: 50%;
+}
+
+.mat-column-difficulty {
+  width: 25%;
+}
+
+.mat-column-category {
+  width: 25%;
 }
 
 .btn_icon {
   margin: auto 10px;
 }
 
-.spacer {
-  flex: 1 1 auto;
+.good-answer {
+  color: green;
 }
 
-.btns {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  border-bottom: none;
+.bad-answer {
+  color: darkred;
 }

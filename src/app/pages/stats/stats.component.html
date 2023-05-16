@@ -1,45 +1,42 @@
-<h1>Statistiques du jeu</h1>
 <mat-grid-list cols="2" gutterSize="10px" rowHeight="5:3"
-               *ngIf="numberOfGamePlayed > 0 &&
-               mostPlayedDifficulty != '' &&
-               greatAnswerPercentage > 0 &&
-               averageDiceSize > 0 &&
-               averageGameTime > 0 &&
-               numberOfPlayers > 0">
-
-  <mat-grid-tile *ngIf="numberOfGamePlayed">
+               *ngIf="!loading">
+  <h1>Statistiques du jeu</h1>
+  <mat-card *ngIf="numberOfGamePlayed == -1">
+    <p>Il n'y a pas de statistiques.</p>
+  </mat-card>
+  <mat-grid-tile *ngIf="numberOfGamePlayed > -1">
     <app-stat-tile
       [header]="'Nombre de partie jouée'"
       [value]="numberOfGamePlayed">
     </app-stat-tile>
   </mat-grid-tile>
-  <mat-grid-tile *ngIf="mostPlayedDifficulty">
+  <mat-grid-tile *ngIf="mostPlayedDifficulty != ''">
     <app-stat-tile
       [header]="'Difficulté la plus jouée'"
       [value]="mostPlayedDifficulty">
     </app-stat-tile>
   </mat-grid-tile>
-  <mat-grid-tile colspan="2">
+  <mat-grid-tile colspan="2" *ngIf="greatAnswerPercentage > -1">
     <app-stat-tile
       [header]="'Pourcentage de bonne réponse dans le jeu'"
       [value]="(greatAnswerPercentage | percent)!">
     </app-stat-tile>
   </mat-grid-tile>
-  <mat-grid-tile>
+  <mat-grid-tile *ngIf="averageDiceSize > -1">
     <app-stat-tile
       [header]="'Taille moyenne du dé'"
       [value]="(averageDiceSize | number: '1.0-2')!"
       [footer]="'faces'">
     </app-stat-tile>
   </mat-grid-tile>
-  <mat-grid-tile>
+  <mat-grid-tile *ngIf="averageGameTime > -1">
     <app-stat-tile
       [header]="'Durée moyenne d\'une partie'"
       [value]="(averageGameTime | number: '1.0-2')!"
       [footer]="'minutes'">
     </app-stat-tile>
   </mat-grid-tile>
-  <mat-grid-tile colspan="2">
+  <mat-grid-tile colspan="2" *ngIf="numberOfPlayers > -1">
     <app-stat-tile
       [header]="'Nombre moyen de joueurs par partie'"
       [value]="(numberOfPlayers | number: '1.0-2')!"
@@ -56,8 +53,6 @@
     </button>
     <mat-menu #menu="matMenu" class="menu-button">
       <button mat-menu-item (click)="exporter.exportTable('csv')">Exporter en CSV</button>
-      <button mat-menu-item (click)="exporter.exportTable('xlsx')">Exporter en XLSX</button>
-      <button mat-menu-item (click)="exporter.exportTable('txt')">Exporter en TXT</button>
       <button mat-menu-item (click)="exporter.exportTable('json')">Exporter en JSON</button>
     </mat-menu>
   </div>
@@ -85,10 +80,4 @@
   <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons></mat-paginator>
 </div>
 
-<app-spinner *ngIf="dataSource.data.length == 0 &&
-      numberOfGamePlayed == 0 &&
-      mostPlayedDifficulty == '' &&
-      greatAnswerPercentage == 0 &&
-      averageDiceSize == 0 &&
-      averageGameTime == 0 &&
-      numberOfPlayers == 0"></app-spinner>
+<app-spinner *ngIf="loading"></app-spinner>

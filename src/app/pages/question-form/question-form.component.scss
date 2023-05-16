@@ -51,3 +51,12 @@ button {
   background-color: $blue-enscm;
   color: $background-color;
 }
+
+.local-add-button, .local-add-button:disabled {
+  background-color: transparent;
+}
+
+.answer-radio {
+  margin-left: 10px;
+  margin-bottom: 15px;
+}
