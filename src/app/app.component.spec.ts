@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'ChemicalPursuit-adm'`, () => {
+  it(`should have as title 'ChemistryDeathRace-adm'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('ChemicalPursuit-adm');
+    expect(app.title).toEqual('ChemistryDeathRace-adm');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('ChemicalPursuit-adm app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('ChemistryDeathRace-adm app is running!');
   });
 });

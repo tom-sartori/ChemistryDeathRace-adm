@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/chemical-pursuit-adm",
+    "public": "dist/chemistry-death-race-adm",
     "ignore": [
       "firebase.json",
       "**/.*",
