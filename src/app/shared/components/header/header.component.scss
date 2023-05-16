@@ -9,6 +9,10 @@ li {
   margin-left: 20px;
 }
 
+li > a {
+  cursor: pointer;
+}
+
 .mat-toolbar {
   background-color: $blue-enscm;
 }

@@ -41,12 +41,16 @@ export class QuestionsListToolbarComponent implements OnInit {
   }
 
   private setDifficulties(): void {
-    this.questionsService.getDifficultiesFromServer();
-    this.questionsService.difficulties$.subscribe(difficulties => this.difficulties = difficulties);
+    this.questionsService.getDifficulties().subscribe(
+      (difficulties) => {
+        this.difficulties = difficulties;
+      }
+    );
   }
 
   private setCategories(difficulty: string): void {
-    this.questionsService.getCategoriesFromServerByDifficulty(difficulty);
-    this.questionsService.categories$.subscribe(categories => this.categories = categories);
+    this.questionsService.getCategoriesFromServerByDifficulty(difficulty).subscribe((categories) => {
+      this.categories = categories
+    });
   }
 }

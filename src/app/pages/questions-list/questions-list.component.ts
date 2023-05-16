@@ -1,59 +1,90 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Question } from '@models/question.model';
 import { QuestionsService } from '@services/questions.service';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { QuestionsListToolbar } from './questions-list-toolbar/questions-list-toolbar';
+import { SnackBarService } from '@services/snack-bar.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-questions-list',
   templateUrl: './questions-list.component.html',
   styleUrls: ['./questions-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed, void', style({height: '0px'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition('expanded <=> void', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
+    ])
+  ]
 })
 export class QuestionsListComponent implements OnInit {
-  loading$!: Observable<boolean>;
-  questions$!: Observable<Question[]>
+  public loading: boolean;
+  public displayedQuestions: MatTableDataSource<Question>;
+  private questions: Question[];
   private filter: QuestionsListToolbar;
+
+  public columnsToDisplay: string[];
+  public columnsToDisplayWithExpand: string[];
+  public expandedQuestion: Question | null;
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private questionsService: QuestionsService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private snackBarService: SnackBarService
   ) {
+    this.loading = true;
+    this.questions = [];
+    this.displayedQuestions = new MatTableDataSource<Question>([]);
     this.filter = new QuestionsListToolbar('', null, null);
+
+    this.columnsToDisplay = ['name', 'difficulty', 'category'];
+    this.columnsToDisplayWithExpand = [...this.columnsToDisplay, 'action']
+    this.expandedQuestion = null;
   }
 
   ngOnInit(): void {
-    this.loading$ = this.questionsService.loading$;
-    this.questions$ = this.questionsService.questions$;
-    this.questionsService.getQuestionsFromServer();
+    this.getQuestions();
   }
 
-  onNewQuestion() {
-    this.router.navigateByUrl('/questions/add')
-  }
-
-  onEditQuestion(id: string) {
-    this.router.navigateByUrl('/questions/update/' + id)
-  }
-
-  onDeleteQuestion(id: string) {
-    if (confirm('Voulez vous vraiment supprimer cette question ?')) {
-      this.questions$.subscribe(
-        (questions: Question[]) => {
-          let question = questions.find(question => question.id === id);
-          if (question) {
-            this.questionsService.deleteQuestion(question.id);
-            Notify.success('Question supprimé avec succès !')
-          }
-        });
+  ngAfterViewInit() {
+    if (this.displayedQuestions) {
+      this.displayedQuestions.paginator = this.paginator;
     }
   }
 
-  search(value: QuestionsListToolbar): void {
+  private getQuestions(difficulty: string | null = null, category: string | null = null): void {
+    this.questionsService.getQuestions(difficulty, category)
+      .subscribe(this.getObserver((questions: Question[]) => {
+        this.questions = questions;
+        this.displayedQuestions.data = questions;
+      }, 'Erreur lors du chargement des questions'));
+  }
+
+  public onNewQuestion() {
+    this.router.navigateByUrl('/questions/add')
+  }
+
+  public onEditQuestion(id: string) {
+    this.router.navigateByUrl('/questions/update/' + id)
+  }
+
+  public onDeleteQuestion(id: string) {
+    if (confirm('Voulez vous vraiment supprimer cette question ?')) {
+      this.loading = true;
+      this.questionsService.deleteQuestion(id)
+        .subscribe(this.getObserver(() => this.getQuestions(), 'Erreur lors de la suppression de la question'));
+    }
+  }
+
+  public search(value: QuestionsListToolbar): void {
     if (value.difficulty !== this.filter.difficulty) {
       value.category = null;
     }
@@ -67,12 +98,30 @@ export class QuestionsListComponent implements OnInit {
   }
 
   private filterByQuestionName(search: string) {
-    this.questions$ = this.questionsService.questions$.pipe(
-      map(questions => questions.filter(question => question.name.toLowerCase().includes(search)))
-    );
+    this.displayedQuestions.data = this.questions.filter(question => {
+      return question.name.toLowerCase().includes(search.toLowerCase());
+    });
   }
 
   private filterQuestions(difficulty: string | null, category: string | null) {
-    this.questionsService.getQuestionsFromServer(difficulty, category);
+    this.getQuestions(difficulty, category);
+  }
+
+  private getObserver(nextFunc: (data: any) => void, errorMessage: string) {
+    return {
+      next: (data: any) => {
+        nextFunc(data);
+        this.loading = false;
+      },
+      error: () => {
+        this.snackBarService.openError(errorMessage);
+        this.loading = false;
+      }
+    };
+  }
+
+  public toggleRow(row: Question, event: Event) {
+    this.expandedQuestion = this.expandedQuestion === row ? null : row;
+    event.stopPropagation();
   }
 }

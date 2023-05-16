@@ -28,3 +28,17 @@ h1 {
 mat-form-field {
   color: $blue-enscm;
 }
+
+.success {
+  background-color: green;
+  color: $background-color;
+}
+
+.error {
+  background-color: red;
+  color: $background-color;
+}
+
+.mat-simple-snackbar-action {
+  color: $background-color;
+}

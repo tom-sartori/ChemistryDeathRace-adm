@@ -23,7 +23,7 @@
       <mat-form-field appearance="fill">
         <mat-label>Ajouter une difficulté</mat-label>
         <input type="text" matInput [formControl]="difficultyCtrl">
-        <button mat-flat-button matSuffix style="background-color: transparent" aria-label="Clear"
+        <button mat-flat-button matSuffix class="local-add-button" aria-label="Add difficulty"
                 (click)="addDifficultyLocally()" [disabled]="!difficultyCtrl.value">
           Ajouter
         </button>
@@ -42,7 +42,7 @@
           <mat-form-field appearance="fill">
             <mat-label>Ajouter une catégorie</mat-label>
             <input type="text" matInput [formControl]="categoryCtrl">
-            <button mat-flat-button matSuffix style="background-color: transparent" aria-label="Clear"
+            <button mat-flat-button matSuffix class="local-add-button" aria-label="Add category"
                     (click)="addCategoryLocally()" [disabled]="!categoryCtrl.value">
               Ajouter
             </button>
@@ -69,7 +69,7 @@
         </mat-form-field>
 
         <mat-radio-group (change)="updateCorrectAnswer(i)" formControlName="answer">
-          <mat-radio-button style="margin-left: 10px; margin-bottom: 15px;" color="primary" [value]="true"
+          <mat-radio-button class="answer-radio" color="primary" [value]="true"
                             [checked]="answer.get('answer')?.value">Bonne réponse
           </mat-radio-button>
         </mat-radio-group>
@@ -86,19 +86,19 @@
 
   <mat-card-actions>
     <button *ngIf="!currentQuestionId" mat-flat-button (click)="onSubmitForm()"
-            [disabled]="(loading$ | async) || (!mainForm.valid)" matTooltip="Enregister la nouvelle question"
+            [disabled]="loading || (!mainForm.valid)" matTooltip="Enregister la nouvelle question"
             matTooltipPosition="left" class="action-buttons">
       <mat-icon class="btn_icon">save</mat-icon>
     </button>
     <button *ngIf="currentQuestionId" mat-flat-button (click)="onSubmitForm()"
-            [disabled]="(loading$ | async) || (!mainForm.valid)" matTooltip="Sauvegarder la question"
+            [disabled]="loading || (!mainForm.valid)" matTooltip="Sauvegarder la question"
             matTooltipPosition="left" class="action-buttons">
       <mat-icon class="btn_icon">save</mat-icon>
     </button>
   </mat-card-actions>
-  <button mat-flat-button (click)="onGoBack()" [disabled]="loading$ | async" matTooltip="Retour"
+  <button mat-flat-button (click)="onGoBack()" [disabled]="loading" matTooltip="Retour"
           matTooltipPosition="right" class="action-buttons">
     <mat-icon class="btn_icon">arrow_back</mat-icon>
   </button>
 </mat-card>
-<app-spinner *ngIf="loading$ | async"></app-spinner>
+<app-spinner *ngIf="loading"></app-spinner>

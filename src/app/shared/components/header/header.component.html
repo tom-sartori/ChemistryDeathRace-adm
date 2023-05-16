@@ -16,7 +16,7 @@
         <li><a routerLink="/questions" routerLinkActive="active">Questions</a></li>
         <li><a routerLink="/categories" routerLinkActive="active">Catégories</a></li>
         <li><a routerLink="/stats" routerLinkActive="active">Statistiques</a></li>
-        <li><a (click)="logout()" style="cursor: pointer">Déconnexion</a></li>
+        <li><a (click)="logout()">Déconnexion</a></li>
       </ul>
 
       <button *ngIf="isUserLoggedIn" mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menu" class="menu-button">

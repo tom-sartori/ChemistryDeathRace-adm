@@ -17,6 +17,8 @@ import { CategoriesListComponent } from './categories-list/categories-list.compo
 import { StatsComponent } from './stats/stats.component';
 import { StatsService } from '@services/stats.service';
 import { StatTileComponent } from './stats/stat-tile/stat-tile.component';
+import { SnackBarService } from '@services/snack-bar.service';
+import { ExportButtonComponent } from './questions-list/questions-list-toolbar/export-button/export-button.component';
 
 const routes: Routes = [
   {path: 'questions', component: QuestionsListComponent},
@@ -42,7 +44,8 @@ const routes: Routes = [
     SignupComponent,
     CategoriesListComponent,
     StatsComponent,
-    StatTileComponent
+    StatTileComponent,
+    ExportButtonComponent
   ],
   imports: [
     SharedModule,
@@ -53,7 +56,8 @@ const routes: Routes = [
   providers: [
     QuestionsService,
     AuthService,
-    StatsService
+    StatsService,
+    SnackBarService
   ]
 })
 export class PagesModule {

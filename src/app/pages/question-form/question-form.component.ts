@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, of, switchMap, tap } from 'rxjs';
+import { of, switchMap } from 'rxjs';
 import { Question } from '@models/question.model';
 import { QuestionsService } from '@services/questions.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { LatexToUtf8Service } from '@services/latex-to-utf8.service';
 import { MathfieldElement } from 'mathlive';
+import { SnackBarService } from '@services/snack-bar.service';
 
 @Component({
   selector: 'app-question-form',
@@ -15,7 +15,7 @@ import { MathfieldElement } from 'mathlive';
 })
 export class QuestionFormComponent implements OnInit, AfterViewInit {
 
-  loading$!: Observable<boolean>
+  public loading: boolean
 
   mainForm!: FormGroup;
   propositions!: FormArray;
@@ -23,11 +23,11 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
   categoryCtrl!: FormControl;
   difficultyCtrl!: FormControl;
 
-  question$!: Observable<Question>;
-  localDifficulties: string[] = [];
-  localCategories: string[] = [];
+  question!: Question;
+  localDifficulties: string[];
+  localCategories: string[];
   currentQuestionId!: string;
-  currentDifficulty: string = '';
+  currentDifficulty: string;
 
   @ViewChild('nameField')
   private nameField!: ElementRef;
@@ -41,14 +41,18 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     private questionsService: QuestionsService,
     private router: Router,
     private route: ActivatedRoute,
-    private latexToUtf8Service: LatexToUtf8Service
+    private latexToUtf8Service: LatexToUtf8Service,
+    private snackBarService: SnackBarService
   ) {
+    this.loading = false;
+    this.localDifficulties = [];
+    this.localCategories = [];
+    this.currentDifficulty = '';
   }
 
   ngOnInit(): void {
     this.initMainForm();
     this.initOptions();
-    this.loading$ = this.questionsService.loading$;
     this.route.url.pipe(
       switchMap(() => {
         this.initDifficulties();
@@ -68,9 +72,15 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
   }
 
   private initDifficulties() {
-    this.questionsService.getDifficultiesObservable().subscribe(x => {
-      this.localDifficulties = x;
-      this.questionsService.setLoadingStatus(false);
+    this.questionsService.getDifficulties().subscribe({
+      next: (difficulties: string[]) => {
+        this.localDifficulties = difficulties;
+        this.loading = false;
+      },
+      error: () => {
+        this.snackBarService.openError('Erreur lors du chargement des difficultés');
+        this.loading = false;
+      }
     });
   }
 
@@ -94,7 +104,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
 
   onSubmitForm(): void {
     if (this.mainForm.invalid) {
-      Notify.failure('Veuillez remplir tous les champs obligatoires. ')
+      this.snackBarService.openError('Veuillez remplir tous les champs obligatoires')
     }
     else {
       if (this.router.url === '/questions/add') {
@@ -103,18 +113,23 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       else {
         this.updateQuestion();
       }
-      this.onGoBack();
     }
   }
 
   private resetForm() {
     this.mainForm.reset();
     this.propositions.clear();
-    this.questionsService.getDifficultiesFromServer();
+    this.questionsService.getDifficulties().subscribe(x => {
+      this.localDifficulties = x;
+    });
   }
 
   private initOptions() {
-    this.questionsService.getDifficultiesFromServer();
+    this.loading = true;
+    this.questionsService.getDifficulties().subscribe(x => {
+      this.localDifficulties = x;
+      this.loading = false;
+    });
   }
 
   private addProposition(name: string = '', answer: boolean = true) {
@@ -126,8 +141,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
 
   private initUpdateForm() {
     this.currentQuestionId = this.route.snapshot.paramMap.get('id')!;
-    this.question$ = this.questionsService.getQuestionById(this.currentQuestionId);
-    this.question$.subscribe((question: Question) => {
+    this.questionsService.getQuestionById(this.currentQuestionId).subscribe((question: Question) => {
       this.updateDifficulty(question.difficulty);
       for (let i = 0; i < question.propositions.length; i++) {
         this.addProposition(question.propositions[i].name, question.propositions[i].answer);
@@ -137,7 +151,8 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
         category: question.category,
         difficulty: question.difficulty,
       });
-      this.questionsService.setLoadingStatus(false);
+
+      this.loading = false;
 
       requestAnimationFrame(() => this.nameMathField = this.addMathField(this.nameField.nativeElement, this.mainForm.controls['name']));
       for (let i: number = 0; i < this.propositions.length; i++) {
@@ -150,17 +165,12 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     let newQuestion: Question = {
       ...this.mainForm.value,
     }
-    this.questionsService.saveQuestion(newQuestion).pipe(
-      tap(saved => {
-        if (saved) {
-          this.resetForm();
-          Notify.success('La question a bien été ajoutée')
-        }
-        else {
-          Notify.failure('Une erreur est survenue lors de l\'enregistrement de la question')
-        }
-      })
-    ).subscribe();
+    this.loading = true;
+    this.questionsService.saveQuestion(newQuestion)
+      .subscribe(this.getObserver(
+        'Question crée avec succès',
+        'Erreur lors de la création de la question'
+      ));
   }
 
   private updateQuestion() {
@@ -168,33 +178,43 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       ...this.mainForm.value,
       id: this.currentQuestionId
     }
-    this.questionsService.updateQuestion(this.currentQuestionId, updatedQuestion).pipe(
-      tap(saved => {
-        if (saved) {
-          this.resetForm();
-          Notify.success('La question a bien été modifiée')
-        }
-        else {
-          Notify.failure('Une erreur est survenue lors de l\'enregistrement de la question')
-        }
-      })
-    ).subscribe();
+    this.questionsService.updateQuestion(this.currentQuestionId, updatedQuestion)
+      .subscribe(this.getObserver(
+        'Question modifiée avec succès',
+        'Erreur lors de la modification de la question'
+      ));
   }
 
-  onGoBack() {
+  private getObserver(successMessage: string, errorMessage: string) {
+    return {
+      next: (question: Question) => {
+        this.resetForm();
+        this.snackBarService.openSuccess(successMessage);
+        this.loading = false;
+        this.onGoBack();
+      },
+      error: (err: any) => {
+        this.snackBarService.openError(errorMessage);
+        this.loading = false;
+        this.onGoBack();
+      }
+    }
+  }
+
+  public onGoBack() {
     this.router.navigateByUrl('/questions').then(() => {
-      this.questionsService.getQuestionsFromServer();
+      this.questionsService.getQuestions();
     })
   }
 
-  addAnswer() {
+  public addAnswer() {
     this.propositions.push(this.formBuilder.group({
       name: ['', Validators.required],
       answer: [false, Validators.required],
     }));
   }
 
-  removeAnswer(index: number): void {
+  public removeAnswer(index: number): void {
     if (0 <= index && index < this.propositions.length) {
       this.unsetPropositionMathField(index);
       if (this.propositions.controls[index].get('answer')?.value) {
@@ -208,28 +228,35 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     }
   }
 
-  updateCorrectAnswer(index: number) {
+  public updateCorrectAnswer(index: number) {
     this.propositions.controls.forEach((control) => {
       control.get('answer')?.setValue(false);
     });
     this.propositions.controls[index].patchValue({answer: true});
   }
 
-  addCategoryLocally() {
+  public addCategoryLocally() {
     this.localCategories.push(this.categoryCtrl.value);
     this.categoryCtrl.setValue('');
   }
 
-  addDifficultyLocally() {
+  public addDifficultyLocally() {
     this.localDifficulties.push(this.difficultyCtrl.value);
     this.difficultyCtrl.setValue('');
   }
 
-  updateDifficulty(newDifficulty: string) {
+  public updateDifficulty(newDifficulty: string) {
     this.currentDifficulty = newDifficulty;
-    this.questionsService.getCategoriesObservable(newDifficulty).subscribe(x => {
-      this.localCategories = x;
-      this.questionsService.setLoadingStatus(false);
+    this.loading = true;
+    this.questionsService.getCategories(newDifficulty).subscribe({
+      next: (categories: string[]) => {
+        this.localCategories = categories;
+        this.loading = false;
+      },
+      error: (err: any) => {
+        this.snackBarService.openError('Erreur lors de la récupération des catégories');
+        this.loading = false;
+      }
     });
   }
 
