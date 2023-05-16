@@ -109,8 +109,8 @@ export class QuestionsListComponent implements OnInit {
 
   private getObserver(nextFunc: (data: any) => void, errorMessage: string) {
     return {
-      next: () => {
-        nextFunc(nextFunc.arguments);
+      next: (data: any) => {
+        nextFunc(data);
         this.loading = false;
       },
       error: () => {

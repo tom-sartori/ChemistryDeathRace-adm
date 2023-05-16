@@ -1,8 +1,8 @@
 <mat-grid-list cols="2" gutterSize="10px" rowHeight="5:3"
                *ngIf="!loading">
   <h1>Statistiques du jeu</h1>
-  <mat-card>
-    <p *ngIf="numberOfGamePlayed == -1">Il n'y a pas de statistiques.</p>
+  <mat-card *ngIf="numberOfGamePlayed == -1">
+    <p>Il n'y a pas de statistiques.</p>
   </mat-card>
   <mat-grid-tile *ngIf="numberOfGamePlayed > -1">
     <app-stat-tile

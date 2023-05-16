@@ -57,8 +57,8 @@ export class CategoriesListComponent implements OnInit {
 
   private getObserver(successFunc: (data: any) => void, errorMsg: string) {
     return {
-      next: () => {
-        successFunc(successFunc.arguments);
+      next: (data: any) => {
+        successFunc(data);
         this.loading = false;
       },
       error: () => {

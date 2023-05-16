@@ -7,62 +7,63 @@
 <mat-card *ngIf="displayedQuestions.data.length === 0">
   <p>Aucune question disponible. </p>
 </mat-card>
-<mat-card *ngIf="displayedQuestions.data.length > 0">
+<mat-card>
+  <ng-container *ngIf="displayedQuestions.data.length > 0">
+    <app-questions-list-toolbar (onSearch)="search($event)"></app-questions-list-toolbar>
 
-  <app-questions-list-toolbar (onSearch)="search($event)"></app-questions-list-toolbar>
+    <mat-table [dataSource]="displayedQuestions" multiTemplateDataRows *ngIf="displayedQuestions.data.length > 0">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Question</th>
+        <td mat-cell *matCellDef="let question"> {{ question.name }} </td>
+      </ng-container>
+      <ng-container matColumnDef="difficulty">
+        <th mat-header-cell *matHeaderCellDef>Difficulté</th>
+        <td mat-cell *matCellDef="let question"> {{ question.difficulty }} </td>
+      </ng-container>
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef>Catégorie</th>
+        <td mat-cell *matCellDef="let question"> {{ question.category }} </td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
+        <td mat-cell *matCellDef="let question">
+          <button mat-icon-button color="primary" (click)="onEditQuestion(question.id)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="onDeleteQuestion(question.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button (click)="toggleRow(question, $event)">
+            <mat-icon>{{ expandedQuestion !== question ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
+          </button>
+        </td>
+      </ng-container>
 
-  <mat-table [dataSource]="displayedQuestions" multiTemplateDataRows *ngIf="displayedQuestions.data.length > 0">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Question</th>
-      <td mat-cell *matCellDef="let question"> {{ question.name }} </td>
-    </ng-container>
-    <ng-container matColumnDef="difficulty">
-      <th mat-header-cell *matHeaderCellDef>Difficulté</th>
-      <td mat-cell *matCellDef="let question"> {{ question.difficulty }} </td>
-    </ng-container>
-    <ng-container matColumnDef="category">
-      <th mat-header-cell *matHeaderCellDef>Catégorie</th>
-      <td mat-cell *matCellDef="let question"> {{ question.category }} </td>
-    </ng-container>
-    <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
-      <td mat-cell *matCellDef="let question">
-        <button mat-icon-button color="primary" (click)="onEditQuestion(question.id)">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="onDeleteQuestion(question.id)">
-          <mat-icon>delete</mat-icon>
-        </button>
-        <button mat-icon-button (click)="toggleRow(question, $event)">
-          <mat-icon>{{ expandedQuestion !== question ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</mat-icon>
-        </button>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="detail">
+        <td mat-cell *matCellDef="let question" [attr.colspan]="columnsToDisplayWithExpand.length">
+          <div class="infos"
+               [@detailExpand]="question == expandedQuestion ? 'expanded' : 'collapsed'">
+            <p *ngIf="question.propositions.length == 1">La réponse</p>
+            <p *ngIf="question.propositions.length > 1">Les réponses</p>
+            <ul>
+              <li *ngFor="let answer of question.propositions">
+                <span *ngIf="answer.answer" class="good-answer">{{ answer.name }} - Bonne réponse</span>
+                <span *ngIf="!answer.answer" class="bad-answer">{{ answer.name }}</span>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="detail">
-      <td mat-cell *matCellDef="let question" [attr.colspan]="columnsToDisplayWithExpand.length">
-        <div class="infos"
-             [@detailExpand]="question == expandedQuestion ? 'expanded' : 'collapsed'">
-          <p *ngIf="question.propositions.length == 1">La réponse</p>
-          <p *ngIf="question.propositions.length > 1">Les réponses</p>
-          <ul>
-            <li *ngFor="let answer of question.propositions">
-              <span *ngIf="answer.answer" class="good-answer">{{ answer.name }} - Bonne réponse</span>
-              <span *ngIf="!answer.answer" class="bad-answer">{{ answer.name }}</span>
-            </li>
-          </ul>
-        </div>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
-    <tr mat-row *matRowDef="let question; columns: columnsToDisplayWithExpand;"
-        class="question-row"
-        [class.expanded-row]="expandedQuestion === question"
-        (click)="toggleRow(question, $event)">
-    </tr>
-    <tr mat-row *matRowDef="let row; columns: ['detail']" class="detail-row"></tr>
-  </mat-table>
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+      <tr mat-row *matRowDef="let question; columns: columnsToDisplayWithExpand;"
+          class="question-row"
+          [class.expanded-row]="expandedQuestion === question"
+          (click)="toggleRow(question, $event)">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['detail']" class="detail-row"></tr>
+    </mat-table>
+  </ng-container>
   <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
 </mat-card>
 

@@ -84,8 +84,8 @@ export class StatsComponent implements OnInit, AfterViewInit {
 
   private getObserver(errorMsg: string, successFunc: (data: any) => void) {
     return {
-      next: () => {
-        successFunc(successFunc.arguments);
+      next: (data: any) => {
+        successFunc(data);
         this.loading = this.dataSource.data.length == 0 ||
           this.numberOfGamePlayed == -1 ||
           this.mostPlayedDifficulty == '' ||
