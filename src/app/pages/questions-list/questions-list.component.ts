@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Question } from '@models/question.model';
@@ -8,6 +8,7 @@ import { SnackBarService } from '@services/snack-bar.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-questions-list',
@@ -33,12 +34,14 @@ export class QuestionsListComponent implements OnInit {
   public expandedQuestion: Question | null;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private questionsService: QuestionsService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private snackBarService: SnackBarService
+    private snackBarService: SnackBarService,
+    private cdr: ChangeDetectorRef
   ) {
     this.loading = true;
     this.questions = [];
@@ -54,18 +57,15 @@ export class QuestionsListComponent implements OnInit {
     this.getQuestions();
   }
 
-  ngAfterViewInit() {
-    if (this.displayedQuestions) {
-      this.displayedQuestions.paginator = this.paginator;
-    }
-  }
-
   private getQuestions(difficulty: string | null = null, category: string | null = null): void {
     this.loading = true;
     this.questionsService.getQuestions(difficulty, category)
       .subscribe(this.getObserver((questions: Question[]) => {
         this.questions = questions;
-        this.displayedQuestions.data = questions;
+        this.displayedQuestions = new MatTableDataSource<Question>(questions);
+        this.cdr.detectChanges();
+        this.displayedQuestions.paginator = this.paginator;
+        this.displayedQuestions.sort = this.sort;
       }, 'Erreur lors du chargement des questions'));
   }
 

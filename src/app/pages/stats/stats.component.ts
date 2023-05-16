@@ -1,16 +1,17 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { StatsService } from '@services/stats.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { Stat } from '@models/stat.model';
 import { SnackBarService } from '@services/snack-bar.service';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-stats',
   templateUrl: './stats.component.html',
   styleUrls: ['./stats.component.scss']
 })
-export class StatsComponent implements OnInit, AfterViewInit {
+export class StatsComponent implements OnInit {
 
   public loading: boolean;
 
@@ -22,12 +23,14 @@ export class StatsComponent implements OnInit, AfterViewInit {
   public numberOfPlayers: number;
 
   public displayedColumns: string[];
-  public dataSource: MatTableDataSource<Stat>;
+  public stats: MatTableDataSource<Stat>;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) statPaginator!: MatPaginator;
 
   constructor(private statsService: StatsService,
-              private snackBarService: SnackBarService) {
+              private snackBarService: SnackBarService,
+              private cdr: ChangeDetectorRef) {
 
     this.numberOfGamePlayed = -1;
     this.mostPlayedDifficulty = '';
@@ -35,7 +38,7 @@ export class StatsComponent implements OnInit, AfterViewInit {
     this.averageDiceSize = -1;
     this.averageGameTime = -1;
     this.numberOfPlayers = -1;
-    this.dataSource = new MatTableDataSource<Stat>([]);
+    this.stats = new MatTableDataSource<Stat>([]);
 
     this.loading = true;
 
@@ -44,12 +47,6 @@ export class StatsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit() {
-    if (this.dataSource) {
-      this.dataSource.paginator = this.paginator;
-    }
   }
 
   private getStats() {
@@ -74,7 +71,10 @@ export class StatsComponent implements OnInit, AfterViewInit {
     }));
 
     this.statsService.getStatsByQuestion().subscribe(this.getObserver('Erreur lors du chargement des statistiques par question', (data: Stat[]) => {
-      this.dataSource = new MatTableDataSource(data);
+      this.stats = new MatTableDataSource(data);
+      this.cdr.detectChanges();
+      this.stats.sort = this.sort;
+      this.stats.paginator = this.statPaginator;
     }));
 
     this.statsService.getAverageNumberOfPlayers().subscribe(this.getObserver('Erreur lors du chargement du nombre moyen de joueurs', (data: number) => {
@@ -86,7 +86,7 @@ export class StatsComponent implements OnInit, AfterViewInit {
     return {
       next: (data: any) => {
         successFunc(data);
-        this.loading = this.dataSource.data.length == 0 ||
+        this.loading = this.stats.data.length == 0 ||
           this.numberOfGamePlayed == -1 ||
           this.mostPlayedDifficulty == '' ||
           this.greatAnswerPercentage == -1 ||

@@ -6,7 +6,7 @@
   </mat-card>
   <mat-grid-tile *ngIf="numberOfGamePlayed > -1">
     <app-stat-tile
-      [header]="'Nombre de partie jouée'"
+      [header]="'Nombre de parties jouées'"
       [value]="numberOfGamePlayed">
     </app-stat-tile>
   </mat-grid-tile>
@@ -18,7 +18,7 @@
   </mat-grid-tile>
   <mat-grid-tile colspan="2" *ngIf="greatAnswerPercentage > -1">
     <app-stat-tile
-      [header]="'Pourcentage de bonne réponse dans le jeu'"
+      [header]="'Pourcentage de bonnes réponses dans le jeu'"
       [value]="(greatAnswerPercentage | percent)!">
     </app-stat-tile>
   </mat-grid-tile>
@@ -39,45 +39,44 @@
   <mat-grid-tile colspan="2" *ngIf="numberOfPlayers > -1">
     <app-stat-tile
       [header]="'Nombre moyen de joueurs par partie'"
-      [value]="(numberOfPlayers | number: '1.0-2')!"
-      [footer]="(numberOfPlayers == 1 ? 'joueur' : 'joueurs') + ' par partie'">
+      [value]="(numberOfPlayers | number: '1.0-2')!">
     </app-stat-tile>
   </mat-grid-tile>
 </mat-grid-list>
 
-<div class="questions-stats" *ngIf="dataSource.data.length != 0">
-  <div class="header">
-    <h1>Statistiques par question</h1>
-    <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Exporter" class="menu-button">
-      <mat-icon>ios_share</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu" class="menu-button">
-      <button mat-menu-item (click)="exporter.exportTable('csv')">Exporter en CSV</button>
-      <button mat-menu-item (click)="exporter.exportTable('json')">Exporter en JSON</button>
-    </mat-menu>
-  </div>
+<mat-card>
+  <ng-container *ngIf="stats.data.length > 0">
+    <div class="header">
+      <h1>Statistiques par question</h1>
+      <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Exporter" class="menu-button">
+        <mat-icon>ios_share</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" class="menu-button">
+        <button mat-menu-item (click)="exporter.exportTable('csv')">Exporter en CSV</button>
+        <button mat-menu-item (click)="exporter.exportTable('json')">Exporter en JSON</button>
+      </mat-menu>
+    </div>
+    <mat-table matTableExporter [dataSource]="stats" matSort #exporter="matTableExporter">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="name"> Question</th>
+        <td mat-cell *matCellDef="let question;"> {{ question.name }} </td>
+      </ng-container>
 
-  <mat-table matTableExporter [dataSource]="dataSource" matSort #exporter="matTableExporter">
+      <ng-container matColumnDef="difficulty">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="difficulty"> Difficulté</th>
+        <td mat-cell *matCellDef="let question"> {{ question.difficulty }} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header="name"> Question</th>
-      <td mat-cell *matCellDef="let element;"> {{ element.name }} </td>
-    </ng-container>
+      <ng-container matColumnDef="percentage">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="percentage"> Pourcentage de bonne réponse</th>
+        <td mat-cell *matCellDef="let question"> {{ question.percentage | percent }} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="difficulty">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header="difficulty"> Difficulté</th>
-      <td mat-cell *matCellDef="let element"> {{ element.difficulty }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="percentage">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header="percentage"> Pourcentage de bonne réponse</th>
-      <td mat-cell *matCellDef="let element"> {{ element.percentage | percent }} </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </mat-table>
-  <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons></mat-paginator>
-</div>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </mat-table>
+  </ng-container>
+  <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
+</mat-card>
 
 <app-spinner *ngIf="loading"></app-spinner>
