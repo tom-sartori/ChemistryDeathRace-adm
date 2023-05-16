@@ -4,13 +4,10 @@
   <mat-icon class="btn_icon">add</mat-icon>
 </button>
 
-<mat-card *ngIf="displayedQuestions.data.length === 0">
-  <p>Aucune question disponible. </p>
-</mat-card>
 <mat-card>
   <ng-container *ngIf="displayedQuestions.data.length > 0">
     <app-questions-list-toolbar (onSearch)="search($event)"></app-questions-list-toolbar>
-
+    <p *ngIf="displayedQuestions.data.length === 0">Aucune question disponible. </p>
     <mat-table [dataSource]="displayedQuestions" multiTemplateDataRows *ngIf="displayedQuestions.data.length > 0">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Question</th>

@@ -61,6 +61,7 @@ export class QuestionsListComponent implements OnInit {
   }
 
   private getQuestions(difficulty: string | null = null, category: string | null = null): void {
+    this.loading = true;
     this.questionsService.getQuestions(difficulty, category)
       .subscribe(this.getObserver((questions: Question[]) => {
         this.questions = questions;
