@@ -16,9 +16,9 @@ export class QuestionsService {
   getQuestions(difficulty: string | null = null, category: string | null = null): Observable<Question[]> {
     let url = `${environment.apiUrl}/question`;
     if (difficulty) {
-      url += `/difficulty/${difficulty}`;
+      url += `/difficulty/${this.urlEncodeParameter(difficulty)}`;
       if (category) {
-        url += `/category/${category}`;
+        url += `/category/${this.urlEncodeParameter(category)}`;
       }
     }
 
@@ -30,11 +30,11 @@ export class QuestionsService {
   }
 
   getCategoriesFromServerByDifficulty(difficulty: string): Observable<string[]> {
-    return this.http.get<string[]>(`${environment.apiUrl}/question/category/difficulty/${difficulty}`);
+    return this.http.get<string[]>(`${environment.apiUrl}/question/category/difficulty/${this.urlEncodeParameter(difficulty)}`);
   }
 
   getCategories(difficulty: string): Observable<string[]> {
-    return this.http.get<string[]>(`${environment.apiUrl}/question/category/difficulty/${difficulty}`);
+    return this.http.get<string[]>(`${environment.apiUrl}/question/category/difficulty/${this.urlEncodeParameter(difficulty)}`);
   }
 
   getQuestionById(id: string): Observable<Question> {
@@ -50,10 +50,14 @@ export class QuestionsService {
   }
 
   updateCategory(selectedDifficulty: string, oldCategory: string, editedCategory: string): Observable<string[]> {
-    return this.http.put<string[]>(`${environment.apiUrl}/question/difficulty/${selectedDifficulty}/category/${oldCategory}`, editedCategory);
+    return this.http.put<string[]>(`${environment.apiUrl}/question/difficulty/${this.urlEncodeParameter(selectedDifficulty)}/category/${this.urlEncodeParameter(oldCategory)}`, editedCategory);
   }
 
   updateDifficulty(oldDifficulty: string, editedDifficulty: string): Observable<string[]> {
-    return this.http.put<string[]>(`${environment.apiUrl}/question/difficulty/${oldDifficulty}`, editedDifficulty);
+    return this.http.put<string[]>(`${environment.apiUrl}/question/difficulty/${this.urlEncodeParameter(oldDifficulty)}`, editedDifficulty);
+  }
+
+  private urlEncodeParameter(str: string): string {
+    return str.replace(/ /g, '_');
   }
 }
