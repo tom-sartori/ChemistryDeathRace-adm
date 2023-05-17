@@ -21,18 +21,19 @@ import { SnackBarService } from '@services/snack-bar.service';
 import { ExportButtonComponent } from './questions-list/questions-list-toolbar/export-button/export-button.component';
 import { CustomPaginatorIntl } from '@services/paginator-init.service';
 import { MatPaginatorIntl } from '@angular/material/paginator';
+import { AdminGuard } from '@shared/guard/admin.guard';
 
 const routes: Routes = [
   {path: 'questions', component: QuestionsListComponent},
   {path: 'questions/add', component: QuestionFormComponent},
   {path: 'questions/update/:id', component: QuestionFormComponent},
   {path: 'categories', component: CategoriesListComponent},
-  {path: 'stats', component: StatsComponent},
-  {path: 'error404', component: ErrorComponent},
+  {path: 'stats', component: StatsComponent, canActivate: [AdminGuard]},
+  {path: 'error/:code', component: ErrorComponent},
   {path: 'signin', component: SigninComponent},
-  {path: 'abcd/efgh/register', component: SignupComponent},
+  {path: 'register', component: SignupComponent, canActivate: [AdminGuard]},
   {path: '', redirectTo: 'questions', pathMatch: 'full'},
-  {path: '**', redirectTo: 'error404'}
+  {path: '**', redirectTo: 'error/404'}
 ];
 
 

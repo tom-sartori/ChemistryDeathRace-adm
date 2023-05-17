@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-height: 80%;
+  height: 80vh;
   max-width: 100%;
 }
 
@@ -13,9 +13,22 @@
   margin: 30px;
   color: $blue-enscm;
   font-size: x-large;
+  text-align: center;
 }
 
 img {
   margin: auto;
   width: 40%;
+}
+
+.img-wrapper > a {
+  color: $blue-enscm;
+  text-decoration: none;
+  font-size: large;
+  position: relative;
+  bottom: 0;
+}
+
+.img-wrapper > a:hover {
+  border-bottom: thin solid $blue-enscm;
 }

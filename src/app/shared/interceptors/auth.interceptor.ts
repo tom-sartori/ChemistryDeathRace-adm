@@ -3,11 +3,12 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/c
 import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
+import { SnackBarService } from '@services/snack-bar.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private jwtHelper: JwtHelperService, private router: Router) {
+  constructor(private jwtHelper: JwtHelperService, private router: Router, private snackBarService: SnackBarService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -15,8 +16,8 @@ export class AuthInterceptor implements HttpInterceptor {
     if (token !== null) {
       if (this.jwtHelper.isTokenExpired(token.token)) {
         localStorage.removeItem('token');
-        //Snack Bar
-        this.router.navigateByUrl("/signin");
+        this.snackBarService.openError('Votre session a expiré, veuillez vous reconnecter');
+        this.router.navigateByUrl('/signin');
         document.dispatchEvent(new Event('logged-out'));
       }
       else {
