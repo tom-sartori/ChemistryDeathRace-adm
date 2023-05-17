@@ -1,6 +1,6 @@
 function processSubAndSuperscripts(input) {
     let subscript = /(.*)\_\{([^\{\}]*)\}(.*)/ms;
-    let superscript = /(.*)\^\{([^\{\}]*)\}(.*)/ms;
+  let superscript = /(.*)\^{\[^\{\}\]*\}(.*)/ms;
     while (true) {
         let results = input.match(subscript);
         if (results === null) {
@@ -231,7 +231,8 @@ const map = {
   "\\enleadertwodots": "‥",
   "\\ldots": "…",
   "\\unicodeellipsis": "…",
-  "\\prime": "′",
+  // "\\prime": "′",
+  "^{\\prime}": "′",
   "\\second": "″",
   "\\dprime": "″",
   "\\third": "‴",
