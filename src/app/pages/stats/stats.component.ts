@@ -93,10 +93,12 @@ export class StatsComponent implements OnInit {
           this.averageDiceSize == -1 ||
           this.averageGameTime == -1 ||
           this.numberOfPlayers == -1
+        this.cdr.detectChanges();
       },
       error: (error: any) => {
         this.snackBarService.openError(errorMsg);
         this.loading = false;
+        this.cdr.detectChanges();
       }
     };
   }

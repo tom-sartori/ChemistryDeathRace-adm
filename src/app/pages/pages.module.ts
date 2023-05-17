@@ -19,6 +19,8 @@ import { StatsService } from '@services/stats.service';
 import { StatTileComponent } from './stats/stat-tile/stat-tile.component';
 import { SnackBarService } from '@services/snack-bar.service';
 import { ExportButtonComponent } from './questions-list/questions-list-toolbar/export-button/export-button.component';
+import { CustomPaginatorIntl } from '@services/paginator-init.service';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 
 const routes: Routes = [
   {path: 'questions', component: QuestionsListComponent},
@@ -57,7 +59,8 @@ const routes: Routes = [
     QuestionsService,
     AuthService,
     StatsService,
-    SnackBarService
+    SnackBarService,
+    {provide: MatPaginatorIntl, useClass: CustomPaginatorIntl}
   ]
 })
 export class PagesModule {
