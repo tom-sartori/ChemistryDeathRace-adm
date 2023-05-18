@@ -28,11 +28,10 @@ export class AuthInterceptor implements HttpInterceptor {
         });
       }
     } else {
-      if (this.router.url !== "/signin") {
-        this.router.navigateByUrl("/signin");
-      }
-      else {
-        console.log("No token found");
+      if (!this.router.url.includes('signin')) {
+        this.router.navigateByUrl('/signin').then(() => {
+          this.snackBarService.openError('Vous devez être connecté pour accéder à cette page');
+        });
       }
     }
     return next.handle(req);

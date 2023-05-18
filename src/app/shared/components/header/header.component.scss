@@ -27,8 +27,8 @@ li > a {
 .left-section {
   display: flex;
   align-items: center;
-  flex-grow: 1;
   height: 100%;
+  width: 40%;
 }
 
 .center-section {
@@ -39,8 +39,11 @@ li > a {
   align-items: center;
   justify-content: center;
   text-align: center;
-  flex-grow: 1;
   height: 100%;
+}
+
+.spacer {
+  flex: 1 1 auto;
 }
 
 .title {
@@ -50,9 +53,9 @@ li > a {
 .right-section {
   display: flex;
   align-items: center;
-  flex-grow: 1;
-  justify-content: flex-end;
+  width: 40%;
   height: 100%;
+  margin-right: 10px;
 }
 
 .active {
