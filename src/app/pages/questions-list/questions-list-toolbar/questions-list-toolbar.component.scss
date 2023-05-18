@@ -11,3 +11,23 @@
 .w-25 {
   width: 25%;
 }
+
+@media (max-width: 950px) {
+
+  mat-card-title-group {
+    align-items: start;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .w-50 {
+    width: 100%;
+  }
+
+  .w-25 {
+    width: 100%;
+  }
+}

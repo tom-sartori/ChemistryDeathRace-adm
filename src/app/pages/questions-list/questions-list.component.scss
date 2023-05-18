@@ -11,9 +11,9 @@
   overflow: hidden;
 }
 
-.infos > p {
-  margin: 0;
-}
+//.infos > p {
+//  margin: 0;
+//}
 
 a {
   display: flex;
@@ -73,4 +73,31 @@ tr.question-row:not(.expanded-row):active {
 
 .bad-answer {
   color: darkred;
+}
+
+.difficulty-category {
+  display: none;
+}
+
+
+@media (max-width: 600px) {
+
+  .mat-column-name {
+    width: 100%;
+  }
+
+  .mat-column-difficulty {
+    display: none;
+  }
+
+  .mat-column-category {
+    display: none;
+  }
+
+  .difficulty-category {
+    display: block;
+    font-weight: bold;
+    font-style: italic;
+    margin-bottom: 15px;
+  }
 }

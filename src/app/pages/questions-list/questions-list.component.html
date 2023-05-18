@@ -41,6 +41,7 @@
         <td mat-cell *matCellDef="let question" [attr.colspan]="columnsToDisplayWithExpand.length">
           <div class="infos"
                [@detailExpand]="question == expandedQuestion ? 'expanded' : 'collapsed'">
+            <p class="difficulty-category">{{ question.difficulty }} - {{ question.category }}</p>
             <p *ngIf="question.propositions.length == 1">La réponse</p>
             <p *ngIf="question.propositions.length > 1">Les réponses</p>
             <ul>
