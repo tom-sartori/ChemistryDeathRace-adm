@@ -28,7 +28,7 @@ const routes: Routes = [
   {path: 'questions/add', component: QuestionFormComponent},
   {path: 'questions/update/:id', component: QuestionFormComponent},
   {path: 'categories', component: CategoriesListComponent},
-  {path: 'stats', component: StatsComponent, canActivate: [AdminGuard]},
+  {path: 'stats', component: StatsComponent},
   {path: 'error/:code', component: ErrorComponent},
   {path: 'signin', component: SigninComponent},
   {path: 'register', component: SignupComponent, canActivate: [AdminGuard]},
