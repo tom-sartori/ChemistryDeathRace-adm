@@ -1,6 +1,6 @@
 function processSubAndSuperscripts(input) {
     let subscript = /(.*)\_\{([^\{\}]*)\}(.*)/ms;
-  let superscript = /(.*)\^{\[^\{\}\]*\}(.*)/ms;
+    let superscript = /(.*)\^\{([^\{\}]*)\}(.*)/ms;
     while (true) {
         let results = input.match(subscript);
         if (results === null) {
@@ -32,6 +32,10 @@ const latex2utf8 = (function (input) {
 
 const map = {
   "\\nabla": "∇",
+  "^\\^p^r^i^m^e": "'",
+  "^\\^d^o^u^b^l^e^p^r^i^m^e": "\"",
+  "\\degree ": "°",
+  "\\degree": "°",
   "\\pm": "±",
   "\\ldots": "…",
   "\\times": "×",
@@ -231,8 +235,8 @@ const map = {
   "\\enleadertwodots": "‥",
   "\\ldots": "…",
   "\\unicodeellipsis": "…",
-  // "\\prime": "′",
-  "^{\\prime}": "′",
+  "\\prime": "'",
+  "^{\\prime}": "'",
   "\\second": "″",
   "\\dprime": "″",
   "\\third": "‴",
