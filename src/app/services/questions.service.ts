@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, retry } from 'rxjs';
 import { Question } from '@models/question.model';
 import { environment } from '@environments/environment';
 
@@ -10,7 +10,9 @@ export class QuestionsService {
   }
 
   saveQuestion(formValue: Question): Observable<Question> {
-    return this.http.post<Question>(`${environment.apiUrl}/question`, formValue);
+    return this.http.post<Question>(`${environment.apiUrl}/question`, formValue).pipe(
+      retry(3)
+    );
   }
 
   getQuestions(difficulty: string | null = null, category: string | null = null): Observable<Question[]> {
@@ -22,39 +24,57 @@ export class QuestionsService {
       }
     }
 
-    return this.http.get<Question[]>(url);
+    return this.http.get<Question[]>(url).pipe(
+      retry(3)
+    );
   }
 
   getDifficulties(): Observable<string[]> {
-    return this.http.get<string[]>(`${environment.apiUrl}/question/difficulty`);
+    return this.http.get<string[]>(`${environment.apiUrl}/question/difficulty`).pipe(
+      retry(3)
+    );
   }
 
   getCategoriesFromServerByDifficulty(difficulty: string): Observable<string[]> {
-    return this.http.get<string[]>(`${environment.apiUrl}/question/category/difficulty/${this.urlEncodeParameter(difficulty)}`);
+    return this.http.get<string[]>(`${environment.apiUrl}/question/category/difficulty/${this.urlEncodeParameter(difficulty)}`).pipe(
+      retry(3)
+    );
   }
 
   getCategories(difficulty: string): Observable<string[]> {
-    return this.http.get<string[]>(`${environment.apiUrl}/question/category/difficulty/${this.urlEncodeParameter(difficulty)}`);
+    return this.http.get<string[]>(`${environment.apiUrl}/question/category/difficulty/${this.urlEncodeParameter(difficulty)}`).pipe(
+      retry(3)
+    );
   }
 
   getQuestionById(id: string): Observable<Question> {
-    return this.http.get<Question>(`${environment.apiUrl}/question/id/${id}`);
+    return this.http.get<Question>(`${environment.apiUrl}/question/id/${id}`).pipe(
+      retry(3)
+    );
   }
 
   deleteQuestion(id: string): Observable<any> {
-    return this.http.delete(`${environment.apiUrl}/question/id/${id}`);
+    return this.http.delete(`${environment.apiUrl}/question/id/${id}`).pipe(
+      retry(3)
+    );
   }
 
   updateQuestion(id: string, updatedGame: Question): Observable<Question> {
-    return this.http.put<Question>(`${environment.apiUrl}/question/id/${id}`, updatedGame);
+    return this.http.put<Question>(`${environment.apiUrl}/question/id/${id}`, updatedGame).pipe(
+      retry(3)
+    );
   }
 
   updateCategory(selectedDifficulty: string, oldCategory: string, editedCategory: string): Observable<string[]> {
-    return this.http.put<string[]>(`${environment.apiUrl}/question/difficulty/${this.urlEncodeParameter(selectedDifficulty)}/category/${this.urlEncodeParameter(oldCategory)}`, editedCategory);
+    return this.http.put<string[]>(`${environment.apiUrl}/question/difficulty/${this.urlEncodeParameter(selectedDifficulty)}/category/${this.urlEncodeParameter(oldCategory)}`, editedCategory).pipe(
+      retry(3)
+    );
   }
 
   updateDifficulty(oldDifficulty: string, editedDifficulty: string): Observable<string[]> {
-    return this.http.put<string[]>(`${environment.apiUrl}/question/difficulty/${this.urlEncodeParameter(oldDifficulty)}`, editedDifficulty);
+    return this.http.put<string[]>(`${environment.apiUrl}/question/difficulty/${this.urlEncodeParameter(oldDifficulty)}`, editedDifficulty).pipe(
+      retry(3)
+    );
   }
 
   private urlEncodeParameter(str: string): string {

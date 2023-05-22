@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, retry } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import * as CryptoJS from 'crypto-js';
@@ -20,21 +20,27 @@ export class AuthService {
   }
 
   public get(): Observable<any> {
-    return this.http.get<any>(environment.authServiceUrl + '/user/enable');
+    return this.http.get<any>(environment.authServiceUrl + '/user/enable').pipe(
+      retry(3)
+    );
   }
 
   public signIn(email: string, password: string): Observable<any> {
     return this.http.post(environment.authServiceUrl + '/user/login', {
       email: this.hash(email),
       password: this.hash(password)
-    });
+    }).pipe(
+      retry(3)
+    );
   }
 
   public signUp(email: string, password: string): Observable<any> {
     return this.http.post(environment.authServiceUrl + '/user/register', {
       email: this.hash(email),
       password: this.hash(password)
-    });
+    }).pipe(
+      retry(3)
+    );
   }
 
   public get isUserLoggedIn(): Observable<boolean> {

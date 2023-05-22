@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, retry } from 'rxjs';
 import { environment } from '@environments/environment';
 import { Stat } from '@models/stat.model';
 
@@ -16,30 +16,44 @@ export class StatsService {
   }
 
   public getGamesPlayed(): Observable<number> {
-    return this.http.get<number>(`${this.serviceUrl}/played`);
+    return this.http.get<number>(`${this.serviceUrl}/played`).pipe(
+      retry(3)
+    );
   }
 
   public getMostPlayedDifficulty(): Observable<string> {
-    return this.http.get(`${this.serviceUrl}/most/played/difficulty`, {responseType: 'text'});
+    return this.http.get(`${this.serviceUrl}/most/played/difficulty`, {responseType: 'text'}).pipe(
+      retry(3)
+    );
   }
 
   public getGreatAnswerPercentage(): Observable<number> {
-    return this.http.get<number>(`${this.serviceUrl}/percentage`);
+    return this.http.get<number>(`${this.serviceUrl}/percentage`).pipe(
+      retry(3)
+    );
   }
 
   public getAverageGameTime(): Observable<number> {
-    return this.http.get<number>(`${this.serviceUrl}/average/time`);
+    return this.http.get<number>(`${this.serviceUrl}/average/time`).pipe(
+      retry(3)
+    );
   }
 
   public getAverageDiceSize(): Observable<number> {
-    return this.http.get<number>(`${this.serviceUrl}/average/dicesize`);
+    return this.http.get<number>(`${this.serviceUrl}/average/dicesize`).pipe(
+      retry(3)
+    );
   }
 
   public getAverageNumberOfPlayers(): Observable<number> {
-    return this.http.get<number>(`${this.serviceUrl}/average/players`);
+    return this.http.get<number>(`${this.serviceUrl}/average/players`).pipe(
+      retry(3)
+    );
   }
 
   public getStatsByQuestion(): Observable<Stat[]> {
-    return this.http.get<Stat[]>(`${this.serviceUrl}/percentage/question`);
+    return this.http.get<Stat[]>(`${this.serviceUrl}/percentage/question`).pipe(
+      retry(3)
+    );
   }
 }
