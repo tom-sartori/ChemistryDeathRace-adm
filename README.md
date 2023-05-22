@@ -6,6 +6,10 @@ ChemistryDeathRace is a school project made at [Polytech](https://www.polytech.u
 
 This project is the administration interface of the ChemistryDeathRace project. It is made with [Angular 14.2.3](https://angular.io/) and [Angular Material](https://material.angular.io/).
 
+<a target="_blank" href="https://github.com/tom-sartori/ChemistryDeathRace">
+  <img alt="github link" src="https://img.shields.io/badge/Chemistry Death Race-GLOBAL-red?style=for-the-badge&logo=github">
+</a>
+<br>
 <a target="_blank" href="https://github.com/tom-sartori/ChemistryDeathRace-ui">
   <img alt="github link" src="https://img.shields.io/badge/Chemistry Death Race-UI-green?style=for-the-badge&logo=github">
 </a>
@@ -20,6 +24,10 @@ This project is the administration interface of the ChemistryDeathRace project. 
 <br>
 <a target="_blank" href="https://github.com/tom-sartori/ChemistryDeathRace-auth">
   <img alt="github link" src="https://img.shields.io/badge/Chemistry Death Race-AUTH-green?style=for-the-badge&logo=github">
+</a>
+<br>
+<a target="_blank" href="https://github.com/tom-sartori/ChemistryDeathRace-doc">
+  <img alt="github link" src="https://img.shields.io/badge/Chemistry Death Race-DOC-green?style=for-the-badge&logo=github">
 </a>
 
 ## Development server
