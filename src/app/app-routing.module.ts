@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {path: '', loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule)},
-  {path: '**', redirectTo: 'error404'}
+  {path: '**', redirectTo: 'error/404'}
 ];
 
 @NgModule({

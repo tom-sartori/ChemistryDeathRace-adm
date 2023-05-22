@@ -212,6 +212,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       name: ['', Validators.required],
       answer: [false, Validators.required],
     }));
+    requestAnimationFrame(() => this.setPropositionMathField(this.propositions.length - 1));
   }
 
   public removeAnswer(index: number): void {
@@ -276,10 +277,12 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
 
     mfe.addEventListener('beforeinput', (ev) => {
       if (ev.inputType === 'insertFromPaste' && ev.data) {
-        let paste: string = ev.data;
-        paste = paste.replace(/ /g, '\\:');
-        mfe.setValue(paste);
-        ev.preventDefault();
+        navigator.clipboard.readText()
+          .then((text: string) => {
+            const paste = text.replace(/ /g, '\\:');
+            mfe.setValue(paste);
+            ev.preventDefault();
+          });
       }
     });
 

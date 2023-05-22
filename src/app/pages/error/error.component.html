@@ -1,5 +1,8 @@
 <div class="img-wrapper">
-  <p>Oups, on dirait que vous avez perdu votre chemin !</p>
+  <p *ngIf="errorCode">Oups, une erreur est survenue.</p>
+  <p *ngIf="errorCode == 404">On dirait que vous avez perdu votre chemin !</p>
+  <p *ngIf="errorCode == 403">On dirait que vous n'avez pas accès à cette page !</p>
   <img src="../../../assets/images/logos/logo_enscm.png" alt="ENSCM logo"/>
+  <a routerLink="">Retour aux questions</a>
 </div>
 

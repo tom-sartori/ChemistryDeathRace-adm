@@ -9,7 +9,8 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
 
-  isUserLoggedIn!: boolean;
+  public isUserLoggedIn!: boolean;
+  public isUserAdmin!: boolean;
 
   constructor(private authService: AuthService, private router: Router) {
   }
@@ -17,13 +18,16 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.authService.isUserLoggedIn.subscribe((value) => {
       this.isUserLoggedIn = value;
+      this.isUserAdmin = this.authService.isAdmin();
     });
     this.isUserLoggedIn = this.authService.isLoggedIn
     document.addEventListener('logged-in', () => {
       this.isUserLoggedIn = true;
+      this.isUserAdmin = this.authService.isAdmin();
     });
     document.addEventListener('logged-out', () => {
       this.isUserLoggedIn = false;
+      this.isUserAdmin = this.authService.isAdmin();
     });
   }
 

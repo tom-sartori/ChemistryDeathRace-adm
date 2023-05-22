@@ -12,12 +12,12 @@ body {
 }
 
 a {
-  color: $background-color;;
+  color: white;;
   text-decoration: none;
   font-weight: normal;
 
   &:hover {
-    border-bottom: $background-color thin solid;
+    border-bottom: white thin solid;
   }
 }
 
@@ -31,14 +31,14 @@ mat-form-field {
 
 .success {
   background-color: green;
-  color: $background-color;
+  color: white;
 }
 
 .error {
   background-color: red;
-  color: $background-color;
+  color: white;
 }
 
 .mat-simple-snackbar-action {
-  color: $background-color;
+  color: white;
 }

@@ -19,6 +19,9 @@ import { StatsService } from '@services/stats.service';
 import { StatTileComponent } from './stats/stat-tile/stat-tile.component';
 import { SnackBarService } from '@services/snack-bar.service';
 import { ExportButtonComponent } from './questions-list/questions-list-toolbar/export-button/export-button.component';
+import { CustomPaginatorIntl } from '@services/paginator-init.service';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { AdminGuard } from '@shared/guard/admin.guard';
 
 const routes: Routes = [
   {path: 'questions', component: QuestionsListComponent},
@@ -26,11 +29,11 @@ const routes: Routes = [
   {path: 'questions/update/:id', component: QuestionFormComponent},
   {path: 'categories', component: CategoriesListComponent},
   {path: 'stats', component: StatsComponent},
-  {path: 'error404', component: ErrorComponent},
+  {path: 'error/:code', component: ErrorComponent},
   {path: 'signin', component: SigninComponent},
-  {path: 'abcd/efgh/register', component: SignupComponent},
+  {path: 'register', component: SignupComponent, canActivate: [AdminGuard]},
   {path: '', redirectTo: 'questions', pathMatch: 'full'},
-  {path: '**', redirectTo: 'error404'}
+  {path: '**', redirectTo: 'error/404'}
 ];
 
 
@@ -57,7 +60,8 @@ const routes: Routes = [
     QuestionsService,
     AuthService,
     StatsService,
-    SnackBarService
+    SnackBarService,
+    {provide: MatPaginatorIntl, useClass: CustomPaginatorIntl}
   ]
 })
 export class PagesModule {

@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import * as CryptoJS from 'crypto-js';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +13,8 @@ export class AuthService {
 
   constructor(
     public router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private jwtHelper: JwtHelperService
   ) {
     this._isUserLoggedIn = new BehaviorSubject<boolean>(false);
   }
@@ -56,5 +58,16 @@ export class AuthService {
 
   private hash(text: string): string {
     return CryptoJS.SHA256(text).toString()
+  }
+
+  public isAdmin(): boolean {
+    const token = JSON.parse(localStorage.getItem('token')!);
+    if (token !== null) {
+      const decodedToken = this.jwtHelper.decodeToken(token.token);
+      if (decodedToken.groups.includes('admin')) {
+        return true;
+      }
+    }
+    return false;
   }
 }
