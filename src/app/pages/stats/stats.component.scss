@@ -65,3 +65,20 @@ mat-grid-tile:hover {
   scale: 1.03;
   background-color: $darker-turquoise-enscm;
 }
+
+.reset-button {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  height: 50px;
+  background-color: $red-color;
+  color: white;
+  font-size: x-large;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.reset-button:hover {
+  background-color: darken($red-color, 10%);
+}

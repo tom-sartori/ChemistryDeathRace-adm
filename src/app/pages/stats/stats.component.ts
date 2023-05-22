@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Stat } from '@models/stat.model';
 import { SnackBarService } from '@services/snack-bar.service';
 import { MatSort } from '@angular/material/sort';
+import { AuthService } from '@services/auth.service';
 
 @Component({
   selector: 'app-stats',
@@ -25,12 +26,15 @@ export class StatsComponent implements OnInit {
   public displayedColumns: string[];
   public stats: MatTableDataSource<Stat>;
 
+  public isAdmin: boolean;
+
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) statPaginator!: MatPaginator;
 
   constructor(private statsService: StatsService,
               private snackBarService: SnackBarService,
-              private cdr: ChangeDetectorRef) {
+              private cdr: ChangeDetectorRef,
+              private authService: AuthService) {
 
     this.numberOfGamePlayed = -1;
     this.mostPlayedDifficulty = '';
@@ -44,6 +48,7 @@ export class StatsComponent implements OnInit {
 
     this.getStats();
     this.displayedColumns = ['name', 'difficulty', 'percentage'];
+    this.isAdmin = this.authService.isAdmin();
   }
 
   ngOnInit(): void {
@@ -86,8 +91,7 @@ export class StatsComponent implements OnInit {
     return {
       next: (data: any) => {
         successFunc(data);
-        this.loading = this.stats.data.length == 0 ||
-          this.numberOfGamePlayed == -1 ||
+        this.loading = this.numberOfGamePlayed == -1 ||
           this.mostPlayedDifficulty == '' ||
           this.greatAnswerPercentage == -1 ||
           this.averageDiceSize == -1 ||
@@ -103,4 +107,12 @@ export class StatsComponent implements OnInit {
     };
   }
 
+  public dropStats() {
+    if (confirm('Êtes-vous sûr de vouloir supprimer toutes les statistiques ?')) {
+      this.statsService.dropStats().subscribe(this.getObserver('Erreur lors de la suppression des statistiques', (data: any) => {
+        this.snackBarService.openSuccess('Statistiques supprimées avec succès');
+        this.getStats();
+      }));
+    }
+  }
 }

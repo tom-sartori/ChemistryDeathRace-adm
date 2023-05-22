@@ -1,6 +1,6 @@
+<h1>Statistiques du jeu</h1>
 <mat-grid-list cols="2" gutterSize="10px" rowHeight="5:3"
-               *ngIf="!loading">
-  <h1>Statistiques du jeu</h1>
+               *ngIf="!loading && stats.data.length > 0">
   <mat-card *ngIf="numberOfGamePlayed == -1">
     <p>Il n'y a pas de statistiques.</p>
   </mat-card>
@@ -44,8 +44,8 @@
   </mat-grid-tile>
 </mat-grid-list>
 
-<mat-card>
-  <ng-container *ngIf="stats.data.length > 0">
+<mat-card *ngIf="stats.data.length > 0">
+  <ng-container>
     <div class="header">
       <h1>Statistiques par question</h1>
       <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Exporter" class="menu-button">
@@ -77,6 +77,14 @@
     </mat-table>
   </ng-container>
   <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
+</mat-card>
+
+<button *ngIf="isAdmin && stats.data.length > 0" class="reset-button" (click)="dropStats()">Réinitialiser les
+  statistiques
+</button>
+
+<mat-card *ngIf="stats.data.length == 0">
+  <p>Il n'y a pas de statistiques.</p>
 </mat-card>
 
 <app-spinner *ngIf="loading"></app-spinner>

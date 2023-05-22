@@ -56,4 +56,10 @@ export class StatsService {
       retry(3)
     );
   }
+
+  public dropStats(): Observable<any> {
+    return this.http.delete(`${this.serviceUrl}/drop`).pipe(
+      retry(3)
+    );
+  }
 }
